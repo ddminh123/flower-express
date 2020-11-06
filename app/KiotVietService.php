@@ -18,14 +18,14 @@ class KiotVietService
 
     public function __construct()
     {
-        $this->shopCode = 'stmmz';// env('KV_SHOP_CODE','stmmz');
-        $this->clientId = 'ac678706-31cd-4fd2-b4d4-8bfea24c9840';//env('KV_API_CLIENT_ID','ac678706-31cd-4fd2-b4d4-8bfea24c9840');
-        $this->clientSecret = '3422A62852F8349E54B741127B53AC79164D2DA6';//env('KV_API_SECRET','3422A62852F8349E54B741127B53AC79164D2DA6');
+        $this->shopCode = 'testzone17';
+        $this->clientId = '0f774a7f-b3b3-42cd-940d-916c4db6e20b';
+        $this->clientSecret = 'F508FD2E2A2A82AD0EF43726E62750A36801077C';
     }
 
     public function saveSyncLog($job,$name, $note = [])
     {
-        return SyncLog::query()->create([
+        Log::info('saveSyncLog',[
             'date_time' => now()->format('Y-m-d H:i:s'),
             'job' => $job,
             'name' => $name,
@@ -50,8 +50,8 @@ class KiotVietService
 
     public function getAccessToken()
     {
-        if (Cache::has('mmz-token')){
-            $token = Cache::get('mmz-token');
+        if (Cache::has('flower-token')){
+            $token = Cache::get('flower-token');
         }else{
             try {
                 $data = [
@@ -67,7 +67,7 @@ class KiotVietService
                     ->asJsonResponse(true)
                     ->post();
                 $token = $response['access_token'];
-                Cache::put('mmz-token',$token,now()->addDays(1));
+                Cache::put('flower-token',$token,now()->addDays(1));
             }catch (\Exception $exception){
                 Log::error('Loi khong lay duoc access_token',[$exception]);
                 $this->saveSyncLog('getAccessToken','getAccessToken',$exception);

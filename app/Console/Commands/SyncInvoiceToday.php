@@ -141,7 +141,7 @@ class SyncInvoiceToday extends Command
         }catch (\Exception $exception){
             $this->error($exception->getMessage());
             $this->service->saveSyncLog($this->getName(),$this->getDescription(),$exception);
-            Log::error('MMZ Loi dong bo invoice '.now()->format('d/m/Y H:i:s'),[$exception]);
+            Log::error('flower Loi dong bo invoice '.now()->format('d/m/Y H:i:s'),[$exception]);
         }
     }
 

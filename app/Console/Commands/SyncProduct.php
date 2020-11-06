@@ -91,7 +91,7 @@ class SyncProduct extends Command
         }catch (\Exception $exception){
             $this->error($exception->getMessage());
             $this->service->saveSyncLog($this->getName(),$this->getDescription(),$exception);
-            Log::error('MMZ loi dong bo product '.now()->format('d/m/Y H:i:s'),[$exception]);
+            Log::error('flower loi dong bo product '.now()->format('d/m/Y H:i:s'),[$exception]);
         }
     }
 }

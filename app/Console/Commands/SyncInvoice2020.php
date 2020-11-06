@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\KiotVietService;
 use App\Models\KiotVietInvoice;
 use App\Models\KiotVietInvoiceDetail;
 use Carbon\Carbon;
@@ -11,10 +12,7 @@ use Ixudra\Curl\Facades\Curl;
 
 class SyncInvoice2020 extends Command
 {
-    protected $urlApi = 'https://id.kiotviet.vn/connect/token';
-    protected $shopCode;
-    protected $clientId;
-    protected $clientSecret;
+    protected $service;
     /**
      * The name and signature of the console command.
      *
@@ -36,9 +34,7 @@ class SyncInvoice2020 extends Command
      */
     public function __construct()
     {
-        $this->shopCode = 'stmmz';// env('KV_SHOP_CODE','stmmz');
-        $this->clientId = 'ac678706-31cd-4fd2-b4d4-8bfea24c9840';//env('KV_API_CLIENT_ID','ac678706-31cd-4fd2-b4d4-8bfea24c9840');
-        $this->clientSecret = '3422A62852F8349E54B741127B53AC79164D2DA6';//env('KV_API_SECRET','3422A62852F8349E54B741127B53AC79164D2DA6');
+        $this->service = new KiotVietService();
         parent::__construct();
     }
 
@@ -49,7 +45,7 @@ class SyncInvoice2020 extends Command
      */
     public function handle()
     {
-        $date = Carbon::createFromDate(2020, 7, 8);
+        $date = Carbon::createFromDate(2020, 11, 02);
 
         $startOfYear = $this->argument('startDate') ?? $date->copy()->startOfYear()->format('Y-m-d');
         $now = $this->argument('endDate') ?? $date->format('Y-m-d');
@@ -65,7 +61,7 @@ class SyncInvoice2020 extends Command
                 'createdDate' => $date,
             ];
             $response = Curl::to('https://public.kiotapi.com/invoices')
-                ->withHeaders(array('Retailer: ' . $this->shopCode, 'Authorization: Bearer ' . $this->getAccessToken()['access_token']))
+                ->withHeaders(array('Retailer: ' . $this->service->shopCode, 'Authorization: Bearer ' . $this->service->getAccessToken()))
                 ->withData($data)
                 ->asJsonResponse(true)
                 ->get();
@@ -86,7 +82,7 @@ class SyncInvoice2020 extends Command
                     'createdDate' => $date,
                 ];
                 $response = Curl::to('https://public.kiotapi.com/invoices')
-                    ->withHeaders(array('Retailer: ' . $this->shopCode, 'Authorization: Bearer ' . $this->getAccessToken()['access_token']))
+                    ->withHeaders(array('Retailer: ' . $this->service->shopCode, 'Authorization: Bearer ' . $this->service->getAccessToken()))
                     ->withData($data)
                     ->asJsonResponse(true)
                     ->get();

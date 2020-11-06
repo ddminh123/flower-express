@@ -13,5 +13,10 @@ Route::group([
 
     $router->get('/', 'HomeController@index')->name('home');
     $router->resource('users', UserController::class);
-
+    $router->resource('customers', CustomerController::class);
+    $router->resource('categories', CategoryController::class);
+    $router->resource('invoices', InvoiceController::class);
+    $router->resource('products', ProductController::class);
+    $router->resource('invoice-details', InvoiceDetailController::class);
+    $router->get('florist', 'InvoiceController@florist')->name('florist');
 });
