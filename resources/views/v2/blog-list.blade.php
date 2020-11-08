@@ -9,7 +9,7 @@
                     @foreach($invoices as $invoice)
                     <div class="blog">
                         <div class="blog-image" data-toggle="modal" data-target="#myModal{{$invoice->_id}}">
-                            <a href="#" class="booking-doc-img"><img class="img-responsive" style="border-radius: 4px;height: 190px;object-fit: cover;width: 150px;margin: 0 auto;" src="{{ $invoice->product->images[0] ?? url('no_image.jpg') }}" alt="Post Image"></a>
+                            <a href="#{{$invoice->_id}}" class="booking-doc-img"><img class="img-responsive" style="border-radius: 4px;height: 190px;object-fit: cover;width: 150px;margin: 0 auto;" src="{{ $invoice->product->images[0] ?? url('no_image.jpg') }}" alt="Post Image"></a>
                         </div>
                         <h3 class="blog-title"><a href="#"><i class="far fa-clock"></i> {{ Carbon\Carbon::parse($invoice->created_at)->diffForHumans() }}</a>
                         </h3>
