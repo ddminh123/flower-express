@@ -5,11 +5,11 @@
     <div class="content">
         <div class="container">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12" style="margin-bottom: 100px">
                     @foreach($invoices as $invoice)
                     <div class="blog">
                         <div class="blog-image" data-toggle="modal" data-target="#myModal{{$invoice->_id}}">
-                            <a href="#{{$invoice->_id}}" class="booking-doc-img"><img class="img-responsive" style="border-radius: 4px;height: 190px;object-fit: cover;width: 150px;margin: 0 auto;" src="{{ $invoice->product->images[0] ?? url('no_image.jpg') }}" alt="Post Image"></a>
+                            <a href="#{{$invoice->_id}}" class="booking-doc-img"><img class="lazy img-responsive" style="border-radius: 4px;height: 190px;object-fit: cover;width: 150px;margin: 0 auto;" src="{{ $invoice->product->images[0] ?? url('no_image.jpg') }}" alt="Post Image"></a>
                         </div>
                         <h3 class="blog-title"><a href="#"><i class="far fa-clock"></i> {{ Carbon\Carbon::parse($invoice->created_at)->diffForHumans() }}</a>
                         </h3>
@@ -37,7 +37,7 @@
                                     <button class="btn btn-sm bg-success-light" href="#" id="pick" data-type="text" data-pk="{{ $invoice->_id }}" value="{{ $invoice->_id }}" data-title="Select sex"><i class="fas fa-check"></i> Nhận đơn</button>
                                 @endif
 
-                                <a href="#" id="sex" data-type="select" data-pk="{{ $invoice->_id }}" data-url="/pick"><i class="fas fa-user"></i> Giao đơn</a>
+                                <a href="#{{$invoice->_id}}" id="sex" class="pick-user" data-type="select" data-pk="{{ $invoice->_id }}" data-url="/pick"><i class="fas fa-user"></i> Giao đơn</a>
                                 @endif
                             </div>
                         </div>

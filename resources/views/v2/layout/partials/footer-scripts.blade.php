@@ -39,8 +39,11 @@
 		<script src="{{ url('assets/js/map.js')}}"></script>
 		@endif
 <script type="text/javascript" src="{{ url('assets/plugins/bootstrap3-editable/src/js/bootstrap-editable.min.js') }}"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.plugins.min.js"></script>
 <script>
     $(function (){
+        $('.lazy').Lazy();
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -70,7 +73,7 @@
                 },
             });
         });
-        $('#sex').editable({
+        $('.pick-user').editable({
             type: 'select',
             showbuttons: false,
             source: newChannels
