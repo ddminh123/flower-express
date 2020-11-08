@@ -57,12 +57,14 @@
 
         $.fn.editable.defaults.mode = 'inline';
         // $('#note').editable();
-        $('#opsNote').editable();
+        $('#opsNote').editable({
+            showbuttons: false,
+        });
         $('#pick').click(function () {
             let val = $(this).val()
             $.ajax({
                 type: "POST",
-                url: '/pick/'+val,
+                url: '/assign/'+val,
                 success: function (res) {
 
                 },

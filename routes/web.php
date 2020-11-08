@@ -23,12 +23,22 @@ Route::post('/florist', function () {
     \Illuminate\Support\Facades\DB::table('kiotviet_invoice_details')->where('_id',$pk)->update([$name=> $value]);
 })->name('page');
 
-Route::post('/pick/{id}', function ($id) {
+Route::post('/pick', function () {
+    $pk = request('pk');
+    $name = request('name');
+    $value = request('value');
+    \Illuminate\Support\Facades\DB::table('kiotviet_invoice_details')->where('_id',$pk)->update([
+        'opsFlorist' => $value
+    ]);
+    return response()->json(['status' => true]);
+})->name('pick');
+
+Route::post('/assign/{id}', function ($id) {
     \Illuminate\Support\Facades\DB::table('kiotviet_invoice_details')->where('_id',$id)->update([
         'opsFlorist'=> \Admin::user()->id,
     ]);
     return response()->json(['status' => true]);
-})->name('pick');
+})->name('assign');
 
 Route::get('/index', function () {
     return view('v2.index');
