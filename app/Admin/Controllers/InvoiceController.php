@@ -19,53 +19,35 @@ use Encore\Admin\Widgets\Table;
 
 class InvoiceController extends AdminController
 {
-    /**
-     * Title for current resource.
-     *
-     * @var string
-     */
-    protected $title = 'KiotVietInvoice';
 
-    protected function showFormParameters($content)
+    public function florist()
     {
-        $parameters = request()->except(['_pjax', '_token']);
+        $time = request('time', 'all');
+        $status = request('status', 'all');
+        $q = request('q', '');
 
-        if (!empty($parameters)) {
-
-            ob_start();
-
-            dump($parameters);
-
-            $contents = ob_get_contents();
-
-            ob_end_clean();
-
-            $content->row(new Box('Form parameters', $contents));
+        $invoices = KiotVietInvoiceDetail::query()->with(['invoice', 'product']);
+        if (in_array($time, ['today', 'tomorrow', 'me'])) {
+            $invoices = $invoices->scopes($time);
         }
+        if (in_array($status, ['1', '2', '3'])) {
+            $invoices = $invoices->where('opsStatus', $status);
+        }
+        if (!empty($q)) {
+            $invoices = $invoices->where('productCode', $q)
+                ->orWhere('productName', 'like', '%' . $q . '%')
+                ->orWhereHas('invoice', function ($qr) use ($q) {
+                    return $qr->where('code', $q);
+                });
+        }
+        $invoices = $invoices->paginate(10);
+
+        return view('v2.blog-list', compact('invoices'));
     }
 
-    public function florist(Content $content)
+    public function update($invoiceId)
     {
-        $content->title('Đơn hàng');
-        $content->description('Danh sách các đơn hàng cần xử lý');
 
-        $this->showFormParameters($content);
-
-        $tab = new Tab();
-
-        $headers = [];
-        $rows = KiotVietInvoiceDetail::query()->with(['product' => function($query) {
-            return $query->select('id','code','fullName','image');
-        },'invoice'])->select('productId', 'invoiceId','quantity','price','opsStatus','opsNote','updated_at')
-            ->get()->toArray();
-        dd($rows);
-
-        $table = new Table($headers, $rows);
-        $tab->add('Hôm nay', $table);
-
-        $content->row($tab);
-
-        return $content;
     }
 
     /**
