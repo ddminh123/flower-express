@@ -56,9 +56,11 @@
                                         <div id="myCarousel" class="carousel slide" data-ride="carousel">
                                             <!-- Indicators -->
                                             <ol class="carousel-indicators">
-                                                @foreach($invoice->product->images as $key => $image)
-                                                <li data-target="#myCarousel" data-slide-to="{{$key}}" class="{{ $key == 0 ? 'active' : '' }}"></li>
-                                                @endforeach
+                                                @if (count($invoice->product->images))
+                                                    @foreach($invoice->product->images as $key => $image)
+                                                        <li data-target="#myCarousel" data-slide-to="{{$key}}" class="{{ $key == 0 ? 'active' : '' }}"></li>
+                                                    @endforeach
+                                                @endif
                                             </ol>
 
                                             <!-- Wrapper for slides -->
