@@ -51,7 +51,10 @@ class InvoiceDetailController extends AdminController
 
         $grid->column('invoice.invoiceDelivery', __('Delivery'))->view('delivery');
 //        $grid->column('opsNote', __('Note'))->editable();
-        $grid->column('opsShipper', __('Shipper'))->editable('select', User::query()->pluck('username','id')->toArray());
+        $listShippers = User::query()->whereHas('roles',  function ($query) {
+            $query->whereIn('name', ['shipper']);
+        })->pluck('name','id')->toArray();
+        $grid->column('opsShipper', __('Shipper'))->editable('select', $listShippers);
 
         $grid->disableActions();
         $grid->disableCreateButton();
