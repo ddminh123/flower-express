@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Models\KiotVietInvoiceDetail;
 use App\Models\User;
+use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -51,7 +52,7 @@ class InvoiceDetailController extends AdminController
 
         $grid->column('invoice.invoiceDelivery', __('Delivery'))->view('delivery');
 //        $grid->column('opsNote', __('Note'))->editable();
-        $listShippers = User::query()->whereHas('roles',  function ($query) {
+        $listShippers = Administrator::query()->whereHas('roles',  function ($query) {
             $query->whereIn('name', ['shipper']);
         })->pluck('name','id')->toArray();
         $grid->column('opsShipper', __('Shipper'))->editable('select', $listShippers);
