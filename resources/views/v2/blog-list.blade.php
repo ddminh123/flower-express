@@ -56,7 +56,7 @@
                                         <div id="myCarousel" class="carousel slide" data-ride="carousel">
                                             <!-- Indicators -->
                                             <ol class="carousel-indicators">
-                                                @if (isset($invoice->product->images))
+                                                @if (is_array($invoice->product->images))
                                                     @foreach($invoice->product->images as $key => $image)
                                                         <li data-target="#myCarousel" data-slide-to="{{$key}}" class="{{ $key == 0 ? 'active' : '' }}"></li>
                                                     @endforeach
@@ -65,11 +65,13 @@
 
                                             <!-- Wrapper for slides -->
                                             <div class="carousel-inner">
-                                                @foreach($invoice->product->images as $key => $image)
-                                                <div class="item {{ $key == 0 ? 'active' : '' }}">
-                                                    <img src="{{$image}}" alt="Los Angeles">
-                                                </div>
-                                                @endforeach
+                                                @if (is_array($invoice->product->images))
+                                                    @foreach($invoice->product->images as $key => $image)
+                                                    <div class="item {{ $key == 0 ? 'active' : '' }}">
+                                                        <img src="{{$image}}" alt="Los Angeles">
+                                                    </div>
+                                                    @endforeach
+                                                @endif
                                             </div>
 
                                             <!-- Left and right controls -->
