@@ -16,7 +16,7 @@ class InvoiceDetailController extends AdminController
      *
      * @var string
      */
-    protected $title = 'KiotVietInvoiceDetail';
+    protected $title = 'Điều phối đơn hàng';
 
     /**
      * Make a grid builder.
