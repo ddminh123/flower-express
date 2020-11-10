@@ -31,9 +31,7 @@ class InvoiceDetailController extends AdminController
             return $qr->select('_id','code','invoiceDelivery', 'customerName', 'customerCode');
         },'product' => function($qr) {
             return $qr->select('_id', 'code', 'images');
-        }])->whereHas('invoice', function ($q) {
-           return $q->whereNotNull('invoiceDelivery');
-        })->limit(10);
+        }]);
 
         $grid->column('product.images', __('Images'))->image('',50,50);
         $grid->column('productCode', __('ProductCode'));
