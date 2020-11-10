@@ -27,19 +27,18 @@ class InvoiceDetailController extends AdminController
     {
         $grid = new Grid(new KiotVietInvoiceDetail());
 
-//        $grid->column('_id', __(' id'));
-//        $grid->column('_invoiceId', __(' invoiceId'));
-//        $grid->column('invoiceId', __('InvoiceId'));
-//        $grid->column('branch_id', __('Branch id'));
-//        $grid->column('branch_name', __('Branch name'));
+        $grid->model()->with(['invoice' => function($qr) {
+            return $qr->select('_id','code','invoiceDelivery', 'customerName', 'customerCode');
+        },'product' => function($qr) {
+            return $qr->select('_id', 'code', 'images');
+        }])->whereHas('invoice', function ($q) {
+           return $q->whereNotNull('invoiceDelivery');
+        })->limit(10);
+
         $grid->column('product.images', __('Images'))->image('',50,50);
         $grid->column('productCode', __('ProductCode'));
-        $grid->column('productName', __('ProductName'));
+        $grid->column('productName', __('ProductName'))->width(150);
         $grid->column('invoice.code', __('InvoiceCode'));
-//        $grid->column('category_id', __('Category id'));
-//        $grid->column('category_name', __('Category name'));
-//        $grid->column('master_code', __('Master code'));
-//        $grid->column('trade_mark_name', __('Trade mark name'));
         $grid->column('quantity', __('Quantity'));
         $grid->column('price', __('Price'));
         $grid->column('opsStatus', __('Status'))->using([
@@ -51,17 +50,10 @@ class InvoiceDetailController extends AdminController
             1 => 'Đang làm',
             2 => 'Đã xong',
         ]);
-//        $grid->column('discount', __('Discount'));
-//        $grid->column('subTotal', __('SubTotal'));
-        $grid->column('opsNote', __('Note'))->editable();
-        $grid->column('opsFlorist', __('Florist'))->editable('select', User::query()->pluck('username','id')->toArray());
-//        $grid->column('serialNumbers', __('SerialNumbers'));
-//        $grid->column('returnQuantity', __('ReturnQuantity'));
-//        $grid->column('created_at', __('Created at'));
-//        $grid->column('updated_at', __('Updated at'));
-//        $grid->column('discountRatio', __('DiscountRatio'));
-//        $grid->column('usePoint', __('UsePoint'));
-//        $grid->column('ProductFormulaHistoryId', __('ProductFormulaHistoryId'));
+
+        $grid->column('invoice.invoiceDelivery', __('Delivery'))->view('delivery');
+//        $grid->column('opsNote', __('Note'))->editable();
+        $grid->column('opsShipper', __('Shipper'))->editable('select', User::query()->pluck('username','id')->toArray());
 
         $grid->disableActions();
         $grid->disableCreateButton();
@@ -112,7 +104,7 @@ class InvoiceDetailController extends AdminController
         $show->field('subTotal', __('SubTotal'));
         $show->field('opsNote', __('Note'));
         $show->field('opsStatus', __('Status'));
-        $show->field('opsFlorist', __('Florist'));
+        $show->field('opsShipper', __('Shipper'));
         $show->field('serialNumbers', __('SerialNumbers'));
         $show->field('returnQuantity', __('ReturnQuantity'));
         $show->field('created_at', __('Created at'));
@@ -150,7 +142,7 @@ class InvoiceDetailController extends AdminController
         $form->text('subTotal', __('SubTotal'));
         $form->text('opsNote', __('Note'));
         $form->select('opsStatus', __('Status'));
-        $form->select('opsFlorist', __('Florist'));
+        $form->select('opsShipper', __('Shipper'));
         $form->text('serialNumbers', __('SerialNumbers'));
         $form->text('returnQuantity', __('ReturnQuantity'));
         $form->text('discountRatio', __('DiscountRatio'));

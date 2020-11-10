@@ -19,4 +19,5 @@ Route::group([
     $router->resource('products', ProductController::class);
     $router->resource('invoice-details', InvoiceDetailController::class);
     $router->get('florist', 'InvoiceController@florist')->name('florist');
+    $router->get('shipper', 'InvoiceController@shipper')->name('shipper');
 });

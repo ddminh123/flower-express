@@ -9,6 +9,7 @@ use App\Admin\Widgets\Invoice\Tomorrow;
 use App\Models\KiotVietInvoice;
 use App\Models\KiotVietInvoiceDetail;
 use Encore\Admin\Controllers\AdminController;
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
@@ -43,6 +44,30 @@ class InvoiceController extends AdminController
         $invoices = $invoices->paginate(10);
 
         return view('v2.blog-list', compact('invoices'));
+    }
+
+    public function shipper()
+    {
+        $time = request('time', 'all');
+        $status = request('status', 'all');
+        $q = request('q', '');
+
+        $invoices = KiotVietInvoiceDetail::query()->where('opsShipper', Admin::user()->id)->with(['invoice', 'product']);
+        if (in_array($time, ['today', 'tomorrow', 'me'])) {
+            $invoices = $invoices->scopes($time);
+        }
+        if (in_array($status, ['1', '2', '3'])) {
+            $invoices = $invoices->where('opsStatus', $status);
+        }
+        if (!empty($q)) {
+            $invoices = $invoices->where('productCode', $q)
+                ->orWhere('productName', 'like', '%' . $q . '%')
+                ->orWhereHas('invoice', function ($qr) use ($q) {
+                    return $qr->where('code', $q);
+                });
+        }
+        $invoices = $invoices->paginate(10);
+        return view('v2.appointments', compact('invoices'));
     }
 
     public function update($invoiceId)

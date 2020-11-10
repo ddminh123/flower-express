@@ -24,4 +24,9 @@ class KiotVietInvoice extends Model
     {
         return $this->hasMany(KiotVietInvoiceDetail::class,'_invoiceId','_id');
     }
+
+    public function customer()
+    {
+        return $this->belongsTo(KiotVietCustomer::class,'customerId', 'id');
+    }
 }
