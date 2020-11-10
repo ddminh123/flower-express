@@ -9,8 +9,8 @@
             </address>
             Người nhận
             <address>
-                <strong>{{ $value['receiver'] }}</strong><br>
-                {{ $value['address'] }}, {{ $value['wardName'] }}, {{ $value['locationName'] }}
+                <strong>{{ $value['receiver'] ?? '' }}</strong><br>
+                {{ $value['address'] ?? '' }}, {{ $value['wardName'] ?? '' }}, {{ $value['locationName'] ?? '' }}
             </address>
         </div>
     </div>
