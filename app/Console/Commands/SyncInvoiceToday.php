@@ -54,7 +54,7 @@ class SyncInvoiceToday extends Command
                 'createdDate' => $dateItem,
                 'SaleChannel' => true,
                 'includeOrderDelivery' => true,
-                'pageSize' => 100
+                'pageSize' => 1
             ];
             $response = Curl::to('https://public.kiotapi.com/invoices')
                 ->withHeaders(array('Retailer: '.$this->service->shopCode,'Authorization: Bearer '.$this->service->getAccessToken()))
