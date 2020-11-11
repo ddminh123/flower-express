@@ -18,9 +18,10 @@
                                 </select>
                                 <select class="form-control" name="status">
                                     <option value="all">Status</option>
-                                    <option value="1" {{ request('status') && request('status') == '1' ? 'selected' : '' }}>Chưa làm</option>
-                                    <option value="2" {{ request('status') && request('status') == '2' ? 'selected' : '' }}>Đang làm</option>
-                                    <option value="3" {{ request('status') && request('status') == '3' ? 'selected' : '' }}>Đã xong</option>
+                                    @foreach(\App\InvoiceEnum::getStatus() as $status => $value)
+                                    <option value="{{$status}}" {{ request('status') && request('status') == $status ? 'selected' : '' }}>
+                                        {{$value}}</option>
+                                    @endforeach
                                 </select>
                                 <input type="text" placeholder="Search..." class="form-control" name="q" value="{{ request('q') }}">
                                 <div class="input-group-append">

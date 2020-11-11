@@ -14,6 +14,19 @@ class InvoiceEnum
     const STATUS_SHIPPER_PICKED = 5;
     const STATUS_SHIPPER_DONE = 6;
 
+    public static function getStatus()
+    {
+        return [
+            0 => 'Chưa làm',
+            1 => 'Đã nhận',
+            2 => 'Làm xong',
+            3 => 'Đã gửi ảnh',
+            4 => 'Khách ok',
+            5 => 'Đang giao',
+            6 => 'Giao thành công',
+        ];
+    }
+
     public static function getStatusName($id)
     {
         $status = [
