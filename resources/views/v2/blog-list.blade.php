@@ -94,9 +94,9 @@
                         </div>
                     @endforeach
                 </div>
+                <a href="{{ admin_url('auth/logout') }}">Logout</a>
             </div>
         </div>
-        <a href="{{ admin_url('auth/logout') }}">Logout</a>
     </div>
     <!-- /Page Content -->
     </div>
