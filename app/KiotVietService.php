@@ -18,9 +18,9 @@ class KiotVietService
 
     public function __construct()
     {
-        $this->shopCode = 'testzone17';
-        $this->clientId = '0f774a7f-b3b3-42cd-940d-916c4db6e20b';
-        $this->clientSecret = 'F508FD2E2A2A82AD0EF43726E62750A36801077C';
+        $this->shopCode = 'hoatuoilt2';
+        $this->clientId = '4aeda44a-71cc-413d-92cd-e266e9ecceca';
+        $this->clientSecret = 'C412B7FCDB03FE4C3818D99673D49633775838F6';
     }
 
     public function saveSyncLog($job,$name, $note = [])
