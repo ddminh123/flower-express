@@ -53,6 +53,7 @@ class SyncInvoiceToday extends Command
             $data = [
                 'createdDate' => $dateItem,
                 'SaleChannel' => true,
+                'includeOrderDelivery' => true,
                 'pageSize' => 100
             ];
             $response = Curl::to('https://public.kiotapi.com/invoices')
@@ -82,6 +83,7 @@ class SyncInvoiceToday extends Command
                     'pageSize' => 100,
                     'currentItem' => $currentItem,
                     'createdDate' => $dateItem,
+                    'includeOrderDelivery' => true,
                     'SaleChannel' => true,
                 ];
                 $response = Curl::to('https://public.kiotapi.com/invoices')
