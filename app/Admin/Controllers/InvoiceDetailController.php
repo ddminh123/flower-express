@@ -41,13 +41,21 @@ class InvoiceDetailController extends AdminController
         $grid->column('quantity', __('Quantity'));
         $grid->column('price', __('Price'));
         $grid->column('opsStatus', __('Status'))->using([
-            0 => '<label class="label label-danger">Chưa làm</label>',
-            1 => '<label class="label label-warning">Đang làm</label>',
-            2 => '<label class="label label-success">Đã xong</label>',
+            0 => 'Chưa làm',
+            1 => 'Đã nhận',
+            2 => 'Làm xong',
+            3 => 'Đã gửi ảnh',
+            4 => 'Khách ok',
+            5 => 'Đang giao',
+            6 => 'Giao thành công',
         ])->filter([
             0 => 'Chưa làm',
-            1 => 'Đang làm',
-            2 => 'Đã xong',
+            1 => 'Đã nhận',
+            2 => 'Làm xong',
+            3 => 'Đã gửi ảnh',
+            4 => 'Khách ok',
+            5 => 'Đang giao',
+            6 => 'Giao thành công',
         ]);
 
         $grid->column('invoice.invoiceDelivery', __('Delivery'))->view('delivery');

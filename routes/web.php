@@ -28,7 +28,8 @@ Route::post('/pick', function () {
     $name = request('name');
     $value = request('value');
     \Illuminate\Support\Facades\DB::table('kiotviet_invoice_details')->where('_id',$pk)->update([
-        'opsFlorist' => $value
+        'opsFlorist' => $value,
+        'opsStatus' => \App\InvoiceEnum::STATUS_FLORIS_PICKED
     ]);
     return response()->json(['status' => true]);
 })->name('pick');
@@ -36,6 +37,7 @@ Route::post('/pick', function () {
 Route::post('/assign/{id}', function ($id) {
     \Illuminate\Support\Facades\DB::table('kiotviet_invoice_details')->where('_id',$id)->update([
         'opsFlorist'=> \Admin::user()->id,
+        'opsStatus' => \App\InvoiceEnum::STATUS_FLORIS_PICKED
     ]);
     return response()->json(['status' => true]);
 })->name('assign');
