@@ -93,8 +93,8 @@
                             </div>
                         </div>
                     @endforeach
+                    <a href="{{ admin_url('auth/logout') }}">Logout</a>
                 </div>
-                <a href="{{ admin_url('auth/logout') }}">Logout</a>
             </div>
         </div>
     </div>
