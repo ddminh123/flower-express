@@ -32,13 +32,10 @@
                             <p id="note" data-type="text" data-pk="{{ $invoice->_id }}" data-url="/florist">{{ $invoice->note }}</p>
                             <p id="opsNote" data-type="text" data-pk="{{ $invoice->_id }}" data-url="/florist">{{ $invoice->opsNote }}</p>
                             <div class="table-action">
-                                @if(empty($invoice->opsFlorist))
                                 @if ($invoice->opsFlorist != \Admin::user()->id)
                                     <button class="btn btn-sm bg-success-light" href="#" id="pick" data-type="text" data-pk="{{ $invoice->_id }}" value="{{ $invoice->_id }}" data-title="Select sex"><i class="fas fa-check"></i> Nhận đơn</button>
                                 @endif
-
                                 <a href="#{{$invoice->_id}}" id="sex" class="pick-user" data-type="select" data-pk="{{ $invoice->_id }}" data-url="/pick"><i class="fas fa-user"></i> Giao đơn</a>
-                                @endif
                             </div>
                         </div>
                     </div>
