@@ -44,7 +44,7 @@
 					</div>
 
 				</div>
-
+                <a href="{{ admin_url('auth/logout') }}">Logout</a>
 			</div>
             <!-- /Page Content -->
 		<!-- Appointment Details Modal -->
