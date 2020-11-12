@@ -57,7 +57,11 @@ class InvoicePaymentAndDelivery extends Command
                         $invoiceApi = $this->service->findInvoiceByCode($invoice->code);
 
                         if ($invoiceApi && !empty($invoiceApi['invoiceDelivery'])) {
-                            $invoice->update(['invoiceDelivery' => $invoiceApi['invoiceDelivery']]);
+
+                            $invoice->update([
+                                'invoiceDelivery' => $invoiceApi['invoiceDelivery'],
+                                'expectedDelivery' => $invoiceApi['invoiceDelivery']['expectedDelivery'] ?? $invoiceApi['purchaseDate'],
+                            ]);
                         }
 
                         $invoice->update(['status_send' => 10]);

@@ -11,7 +11,7 @@
                         <div class="blog-image" data-toggle="modal" data-target="#myModal{{$invoice->_id}}">
                             <a href="#{{$invoice->_id}}" class="booking-doc-img"><img class="lazy img-responsive" style="border-radius: 4px;height: 190px;object-fit: cover;width: 150px;margin: 0 auto;" src="{{ $invoice->product->images[0] ?? url('no_image.jpg') }}" alt="Post Image"></a>
                         </div>
-                        <h3 class="blog-title"><a href="#"><i class="far fa-clock"></i> {{ Carbon\Carbon::parse($invoice->invoice->purchaseDate)->format('d/m/Y H:i:s') }}</a>
+                        <h3 class="blog-title"><a href="#"><i class="far fa-clock"></i> {{ Carbon\Carbon::parse($invoice->invoice->expectedDelivery)->format('d/m/Y H:i:s') }}</a>
                         </h3>
                         <div class="blog-info clearfix">
                             <div class="post-left">
