@@ -48,7 +48,7 @@ class InvoicePaymentAndDelivery extends Command
     public function handle()
     {
         KiotVietInvoice::query()->select('_id', 'id', 'code', 'payments', 'invoiceDelivery', 'status_send')
-            ->whereNull('invoiceDelivery')->orderByDesc('_id')
+            ->whereNull('invoiceDelivery')->orWhere('invoiceDelivery', '')->orderByDesc('_id')
             ->chunk(1000, function ($invoices) {
                 foreach ($invoices as $invoice) {
                     try {
