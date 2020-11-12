@@ -27,7 +27,7 @@ class InvoiceController extends AdminController
         $status = request('status', 'all');
         $q = request('q', '');
 
-        $invoices = KiotVietInvoiceDetail::query()->orderByDesc('expectedDelivery')->with(['invoice', 'product']);
+        $invoices = KiotVietInvoiceDetail::query()->with(['invoice', 'product']);
         if (in_array($time, ['today', 'tomorrow', 'me'])) {
             $invoices = $invoices->scopes($time);
         }
