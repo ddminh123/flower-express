@@ -27,23 +27,24 @@ class InvoiceController extends AdminController
         $status = request('status', 'all');
         $q = request('q', '');
 
-        $invoices = KiotVietInvoiceDetail::query()->with(['invoice', 'product']);
+        $invoices = KiotVietInvoice::query()->select('_id','status', 'expectedDelivery')
+            ->where('status', '!=', 2);
         if (in_array($time, ['today', 'tomorrow', 'me'])) {
             $invoices = $invoices->scopes($time);
         }
-        if (in_array($status, ['1', '2', '3'])) {
-            $invoices = $invoices->where('opsStatus', $status);
-        }
-        if (!empty($q)) {
-            $invoices = $invoices->where('productCode', $q)
-                ->orWhere('productName', 'like', '%' . $q . '%')
-                ->orWhereHas('invoice', function ($qr) use ($q) {
-                    return $qr->where('code', $q);
-                });
-        }
-        $invoices = $invoices->paginate(10);
+//        if (in_array($status, ['1', '2', '3'])) {
+//            $invoices = $invoices->where('opsStatus', $status);
+//        }
+//        if (!empty($q)) {
+//            $invoices = $invoices->where('productCode', $q)
+//                ->orWhere('productName', 'like', '%' . $q . '%')
+//                ->orWhereHas('invoice', function ($qr) use ($q) {
+//                    return $qr->where('code', $q);
+//                });
+//        }
+        $invoices = $invoices->orderByDesc('expectedDelivery')->simplePaginate(10);
 
-        return view('v2.blog-list', compact('invoices'));
+        return view('v2.index', compact('invoices'));
     }
 
     public function shipper()

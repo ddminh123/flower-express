@@ -6,25 +6,26 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12" style="margin-bottom: 100px">
-                    @foreach($invoices as $invoice)
+                    @foreach($invoices as $invoiceDetail)
+                        @foreach($invoiceDetail->items as $invoice)
                     <div class="blog">
                         <div class="blog-image" data-toggle="modal" data-target="#myModal{{$invoice->_id}}">
                             <a href="#{{$invoice->_id}}" class="booking-doc-img"><img class="lazy img-responsive" style="border-radius: 4px;height: 190px;object-fit: cover;width: 150px;margin: 0 auto;" src="{{ $invoice->product->images[0] ?? url('no_image.jpg') }}" alt="Post Image"></a>
                         </div>
-                        <h3 class="blog-title"><a href="#"><i class="far fa-clock"></i> {{ Carbon\Carbon::parse($invoice->invoice->expectedDelivery)->format('d/m/Y H:i:s') }}</a>
+                        <h3 class="blog-title"><a href="#"><i class="far fa-clock"></i> {{ !empty($invoiceDetail->expectedDelivery) ? Carbon\Carbon::parse($invoiceDetail->expectedDelivery)->format('d/m/Y H:i:s') : $invoice->invoice->purchaseDate ?? '' }}</a>
                         </h3>
                         <div class="blog-info clearfix">
                             <div class="post-left">
                                 <ul>
                                     <li>
                                         <div class="post-author">
-                                            <span>{{ $invoice->product->fullName }}</span>
+                                            <span>{{ $invoice->product->fullName ?? '' }}</span>
                                         </div>
                                     </li>
                                     <li><i class="fa fa-list"></i>{{ $invoice->invoice->code }} | SL: {{ $invoice->quantity }}</li>
-                                    <li><i class="fa fa-user"></i>Sale: {{ $invoice->invoice->soldByName }}</li>
-                                    <li><i class="far fa-comments"></i>{{ $invoice->status_text }}</li>
-                                    <li><i class="fa fa-user"></i>Florist: {{ $invoice->florist->name }}</li>
+                                    <li><i class="fa fa-user"></i>Sale: {{ $invoice->invoice->soldByName ?? '' }}</li>
+                                    <li><i class="far fa-comments"></i><label class="label label-success">{{ $invoice->status_text }}</label></li>
+                                    <li><i class="fa fa-user"></i>Florist: {{ $invoice->florist->name ?? '' }}</li>
                                 </ul>
                             </div>
                         </div>
@@ -46,14 +47,14 @@
                                 <!-- Modal content-->
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h4 class="modal-title">{{ $invoice->product->fullName }}</h4>
+                                        <h4 class="modal-title">{{ $invoice->product->fullName ?? '' }}</h4>
                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                                     </div>
                                     <div class="modal-body">
                                         <div id="myCarousel" class="carousel slide" data-ride="carousel">
                                             <!-- Indicators -->
                                             <ol class="carousel-indicators">
-                                                @if (is_array($invoice->product->images))
+                                                @if (isset($invoice->product->images) && is_array($invoice->product->images))
                                                     @foreach($invoice->product->images as $key => $image)
                                                         <li data-target="#myCarousel" data-slide-to="{{$key}}" class="{{ $key == 0 ? 'active' : '' }}"></li>
                                                     @endforeach
@@ -62,7 +63,7 @@
 
                                             <!-- Wrapper for slides -->
                                             <div class="carousel-inner">
-                                                @if (is_array($invoice->product->images))
+                                                @if (isset($invoice->product->images) && is_array($invoice->product->images))
                                                     @foreach($invoice->product->images as $key => $image)
                                                     <div class="item {{ $key == 0 ? 'active' : '' }}">
                                                         <img src="{{$image}}" alt="Los Angeles">
@@ -90,6 +91,9 @@
                             </div>
                         </div>
                     @endforeach
+                    @endforeach
+                    {{ $invoices->appends(request()->input())->links() }}
+                        <hr>
                     <a href="{{ admin_url('auth/logout') }}">Logout</a>
                 </div>
             </div>

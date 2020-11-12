@@ -69,7 +69,7 @@
                 type: "POST",
                 url: '/assign/'+val,
                 success: function (res) {
-
+                    $(this).hide()
                 },
             });
         });

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\InvoiceEnum;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,7 +20,7 @@ class KiotVietInvoiceDetail extends Model
 
     public function invoice()
     {
-        return $this->belongsTo(KiotVietInvoice::class, 'invoiceId', 'id')->orderByDesc('expectedDelivery');
+        return $this->belongsTo(KiotVietInvoice::class, 'invoiceId', 'id');
     }
 
     public function product()
@@ -55,12 +56,8 @@ class KiotVietInvoiceDetail extends Model
 
     public function getStatusTextAttribute()
     {
-        $status = [
-            0 => 'Chưa làm',
-            1 => 'Đang làm',
-            2 => 'Đã xong',
-        ];
+        $status = InvoiceEnum::getStatus();
 
-        return $status[$this->status] ?? $status[0];
+        return $status[$this->opsStatus] ?? $status[0];
     }
 }

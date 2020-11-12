@@ -6,6 +6,7 @@ use App\Models\KiotVietInvoice;
 use App\Models\KiotVietInvoiceDelivery;
 use App\Models\KiotVietInvoicePayment;
 use App\KiotVietService;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Schema\Blueprint;
@@ -57,10 +58,13 @@ class InvoicePaymentAndDelivery extends Command
                         $invoiceApi = $this->service->findInvoiceByCode($invoice->code);
 
                         if ($invoiceApi && !empty($invoiceApi['invoiceDelivery'])) {
-
+                            $expectedDelivery = $invoiceApi['purchaseDate'];
+                            if (isset($invoiceApi['invoiceDelivery']['expectedDelivery'])) $expectedDelivery = $invoiceApi['invoiceDelivery']['expectedDelivery'];
+                            $expectedDelivery = Carbon::parse($expectedDelivery)->format('Y-m-d H:i:s');
+                            $this->info($expectedDelivery);
                             $invoice->update([
                                 'invoiceDelivery' => $invoiceApi['invoiceDelivery'],
-                                'expectedDelivery' => $invoiceApi['invoiceDelivery']['expectedDelivery'] ?? $invoiceApi['purchaseDate'],
+                                'expectedDelivery' => $expectedDelivery,
                             ]);
                         }
 
