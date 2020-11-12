@@ -37,14 +37,14 @@ class KiotVietInvoiceDetail extends Model
     public function scopeToday($query)
     {
         return $query->whereHas('invoice', function ($q) {
-           return $q->whereDate('purchaseDate', Carbon::today());
+           return $q->whereDate('expectedDelivery', Carbon::today());
         });
     }
 
     public function scopeTomorrow($query)
     {
         return $query->whereHas('invoice', function ($q) {
-            return $q->whereDate('purchaseDate', Carbon::tomorrow());
+            return $q->whereDate('expectedDelivery', Carbon::tomorrow());
         });
     }
 
