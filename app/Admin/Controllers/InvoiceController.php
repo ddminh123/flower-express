@@ -32,16 +32,14 @@ class InvoiceController extends AdminController
         if (in_array($time, ['today', 'tomorrow', 'me'])) {
             $invoices = $invoices->scopes($time);
         }
-//        if (in_array($status, ['1', '2', '3'])) {
-//            $invoices = $invoices->where('opsStatus', $status);
-//        }
-//        if (!empty($q)) {
-//            $invoices = $invoices->where('productCode', $q)
-//                ->orWhere('productName', 'like', '%' . $q . '%')
-//                ->orWhereHas('invoice', function ($qr) use ($q) {
-//                    return $qr->where('code', $q);
-//                });
-//        }
+        if (in_array($status, ['0', '1', '2', '3', '4', '5', '6'])) {
+            $invoices = $invoices->whereHas('items', function ($q) use ($status) {
+                return $q->where('opsStatus', $status);
+            });
+        }
+        if (!empty($q)) {
+            $invoices = $invoices->where('code', 'like', '%' . $q . '%');
+        }
         $invoices = $invoices->orderByDesc('expectedDelivery')->simplePaginate(10);
 
         return view('v2.index', compact('invoices'));

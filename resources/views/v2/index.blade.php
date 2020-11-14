@@ -66,7 +66,9 @@
                             <div class="pro-content">
                                 <h3 class="title">
                                     <a href="#" title="Thời gian giao hàng"><i class="far fa-clock"></i> {{ !empty($invoiceDetail->expectedDelivery) ? Carbon\Carbon::parse($invoiceDetail->expectedDelivery)->format('d/m/Y H:i:s') : $invoiceDetail->purchaseDate ?? '' }}</a>
-                                    <i class="fas fa-check-circle verified"></i>
+                                    @if ($invoice->opsStatus == 1)
+                                        <i class="fas fa-check-circle verified"></i>
+                                    @endif
                                 </h3>
                                 <p class="speciality">{{ $invoice->invoice->code }} | SL: {{ $invoice->quantity }} | {{ $invoice->product->fullName ?? '' }}</p>
                                 <div>
