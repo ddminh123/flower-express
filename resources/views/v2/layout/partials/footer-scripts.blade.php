@@ -63,13 +63,16 @@
         $('#opsNote').editable({
             showbuttons: false,
         });
-        $('#pick').click(function () {
-            let val = $(this).val()
+        $('.pick').click(function (e) {
+            console.log(e.target.dataset.value)
+            let val = e.target.dataset.value
             $.ajax({
                 type: "POST",
                 url: '/assign/'+val,
                 success: function (res) {
-                    $(this).hide()
+                    $('.pick-el-'+val).hide()
+                    $('.florist-'+val).html(res.opsFloristName)
+                    $('.status-'+val).html(res.opsStatusName)
                 },
             });
         });

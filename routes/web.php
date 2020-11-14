@@ -31,7 +31,8 @@ Route::post('/pick', function () {
         'opsFlorist' => $value,
         'opsStatus' => \App\InvoiceEnum::STATUS_FLORIS_PICKED
     ]);
-    return response()->json(['status' => true]);
+    $res = \Illuminate\Support\Facades\DB::table('kiotviet_invoice_details')->where('_id',$pk)->first();
+    return response()->json($res);
 })->name('pick');
 
 Route::post('/assign/{id}', function ($id) {
@@ -39,7 +40,11 @@ Route::post('/assign/{id}', function ($id) {
         'opsFlorist'=> \Admin::user()->id,
         'opsStatus' => \App\InvoiceEnum::STATUS_FLORIS_PICKED
     ]);
-    return response()->json(['status' => true]);
+    $res = \App\Models\KiotVietInvoiceDetail::query()->where('_id',$id)->first();
+    $data = $res->toArray();
+    $data['opsFloristName'] = $res->florist->name ?? '';
+    $data['opsStatusName'] = $res->status_text ?? '';
+    return response()->json($data);
 })->name('assign');
 
 Route::get('/index', function () {

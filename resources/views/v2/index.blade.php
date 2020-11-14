@@ -78,7 +78,10 @@
                                         <i class="fas fa-user"></i> Sale: {{ $invoice->invoice->soldByName ?? '' }}
                                     </li>
                                     <li>
-                                        <i class="fas fa-users"></i> Florist: {{ $invoice->florist->name ?? '' }}
+                                        <i class="fas fa-users"></i> Florist: <span class="florist-{{$invoice->_id}}">{{ $invoice->florist->name ?? '' }}</span>
+                                    </li>
+                                    <li>
+                                        <i class="far fa-clock"></i> Status: <span class="status-{{$invoice->_id}}">{{ $invoice->status_text }}</span>
                                     </li>
                                     <li>
                                         <i class="far fa-clock"></i> {{ !empty($invoiceDetail->purchaseDate) ? Carbon\Carbon::parse($invoiceDetail->purchaseDate)->format('d/m/Y H:i:s') : now()->format('d/m/Y H:i:s') }}
@@ -89,8 +92,8 @@
                                 </ul>
                                 <div class="row row-sm">
                                     @if ($invoice->opsFlorist != \Admin::user()->id)
-                                    <div class="col-6">
-                                        <a href="#" class="btn book-btn" data-type="select" data-pk="{{ $invoice->_id }}" data-url="/pick">Nhận đơn</a>
+                                    <div class="col-6 pick-el-{{$invoice->_id}}">
+                                        <a href="#{{$invoice->_id}}" class="btn book-btn pick" data-value="{{ $invoice->_id }}">Nhận đơn</a>
                                     </div>
                                     @endif
                                     <div class="col-6">
