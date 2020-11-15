@@ -66,7 +66,7 @@
                             <div class="pro-content">
                                 <h3 class="title">
                                     <a href="#" title="Thời gian giao hàng"><i class="far fa-clock"></i> {{ !empty($invoiceDetail->expectedDelivery) ? Carbon\Carbon::parse($invoiceDetail->expectedDelivery)->format('d/m/Y H:i:s') : $invoiceDetail->purchaseDate ?? '' }}</a>
-                                    @if ($invoice->opsStatus == 1)
+                                    @if ($invoice->opsStatus == 2)
                                         <i class="fas fa-check-circle verified"></i>
                                     @endif
                                 </h3>
@@ -89,7 +89,7 @@
                                         <i class="far fa-clock"></i> {{ !empty($invoiceDetail->purchaseDate) ? Carbon\Carbon::parse($invoiceDetail->purchaseDate)->format('d/m/Y H:i:s') : now()->format('d/m/Y H:i:s') }}
                                     </li>
                                     <li>
-                                        <i class="far fa-money-bill-alt"></i> Total: {{ number_format($invoiceDetail->total) }} - TotalPayment: {{ number_format($invoiceDetail->totalPayment) }}
+                                        <i class="far fa-money-bill-alt"></i> Total: {{ number_format($invoice->invoice->total) }}
                                     </li>
                                 </ul>
                                 <div class="row row-sm">
@@ -97,6 +97,10 @@
                                     <div class="col-6 pick-el-{{$invoice->_id}}">
                                         <a href="#{{$invoice->_id}}" class="btn book-btn pick" data-value="{{ $invoice->_id }}">Nhận đơn</a>
                                     </div>
+                                    @else
+                                        <div class="col-6 ok-el-{{$invoice->_id}}">
+                                            <a href="#{{$invoice->_id}}" class="btn book-btn ok" data-value="{{ $invoice->_id }}">Hoàn thành</a>
+                                        </div>
                                     @endif
                                     <div class="col-6">
                                         <a href="#{{$invoice->_id}}" id="sex" class="btn view-btn pick-user" data-type="select" data-pk="{{ $invoice->_id }}" data-url="/pick" data-title="Select sex">Giao đơn</a>

@@ -26,9 +26,10 @@ class InvoiceController extends AdminController
 
     public function florist()
     {
-        $time = request('time', 'all');
+        $time = request('time', 'today');
         $status = request('status', 'all');
         $q = request('q', '');
+        //florist sẽ care thêm tiền phụ phí thêm hoa = total + THK000002 (surchase)
 
         $invoices = KiotVietInvoice::query()->select('_id','status', 'expectedDelivery')
             ->where('status', '!=', 2);
@@ -58,6 +59,8 @@ class InvoiceController extends AdminController
             ->asJsonResponse(true)
             ->get();
         $location = geoip($response['ip']);
+//        $address = Geocoder::getAddressForCoordinates($location['lat'],$location['lon']);
+//        dd($address);
 
         $invoices = KiotVietInvoiceDetail::query()->where('opsShipper', Admin::user()->id)->with(['invoice', 'product']);
         if (in_array($time, ['today', 'tomorrow', 'me'])) {
