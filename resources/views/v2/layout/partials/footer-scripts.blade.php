@@ -63,14 +63,20 @@
         $('#opsNote').editable({
             showbuttons: false,
         });
-        $('.pick').click(function (e) {
+
+        $(document).on('click','.pick', function (e) {
             let val = e.target.dataset.value
             $.ajax({
                 type: "POST",
                 url: '/assign/'+val,
                 success: function (res) {
-                    let html = '<a href="#'+val+'" class="btn book-btn pick" data-value="'+val+'">Hoàn thành</a>'
-                    $('.pick-el-'+val).html(html)
+                    if (res.opsStatus === 1){
+                        let html = '<a href="#'+val+'" class="btn book-btn pick" data-value="'+val+'">Hoàn thành</a>'
+                        $('.pick-el-'+val).html(html)
+                    }else {
+                        $('.success-el-'+val).hide()
+                        $('.pick-el-'+val).hide()
+                    }
                     $('.florist-'+val).html(res.opsFloristName)
                     $('.status-'+val).html(res.opsStatusName)
                 },

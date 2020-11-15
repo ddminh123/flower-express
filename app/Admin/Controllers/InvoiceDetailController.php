@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\InvoiceEnum;
 use App\Models\KiotVietInvoiceDetail;
 use App\Models\User;
 use Encore\Admin\Auth\Database\Administrator;
@@ -51,6 +52,14 @@ class InvoiceDetailController extends AdminController
             5 => 'Đang giao',
             6 => 'Giao thành công',
         ])->filter([
+            0 => 'Chưa làm',
+            1 => 'Đã nhận',
+            2 => 'Làm xong',
+            3 => 'Đã gửi ảnh',
+            4 => 'Khách ok',
+            5 => 'Đang giao',
+            6 => 'Giao thành công',
+        ])->editable('select',[
             0 => 'Chưa làm',
             1 => 'Đã nhận',
             2 => 'Làm xong',

@@ -99,7 +99,7 @@
                                     </div>
                                     @elseif ($invoice->opsStatus == \App\InvoiceEnum::STATUS_FLORIS_PICKED)
 
-                                        <div class="col-6 pick-el-{{$invoice->_id}}">
+                                        <div class="col-6 pick-el-{{$invoice->_id}} success-el-{{$invoice->_id}}">
                                             <a href="#{{$invoice->_id}}" class="btn book-btn pick" data-value="{{ $invoice->_id }}">Hoàn thành</a>
                                         </div>
                                     @endif
