@@ -14,6 +14,10 @@ class KiotVietInvoiceDetail extends Model
 
     protected $table = 'kiotviet_invoice_details';
 
+    protected $casts = [
+        'opsImages' => 'array'
+    ];
+
     protected $guarded = [];
 
     protected $primaryKey = '_id';
@@ -31,6 +35,13 @@ class KiotVietInvoiceDetail extends Model
     public function florist()
     {
         return $this->belongsTo(User::class, 'opsFlorist', 'id')->withDefault([
+            'name' => ''
+        ]);
+    }
+
+    public function shipper()
+    {
+        return $this->belongsTo(User::class, 'opsShipper', 'id')->withDefault([
             'name' => ''
         ]);
     }
@@ -59,5 +70,14 @@ class KiotVietInvoiceDetail extends Model
         $status = InvoiceEnum::getStatus();
 
         return $status[$this->opsStatus] ?? $status[0];
+    }
+
+    public function getStatusProgressAttribute()
+    {
+        $statusCurrent = $this->getAttribute('opsStatus');
+        $total = count(InvoiceEnum::getStatus()) - 1;
+
+
+        return $statusCurrent/($total) * 100;
     }
 }

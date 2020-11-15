@@ -9,6 +9,7 @@ use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
+use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 
 class InvoiceDetailController extends AdminController
@@ -19,6 +20,14 @@ class InvoiceDetailController extends AdminController
      * @var string
      */
     protected $title = 'Điều phối đơn hàng';
+
+    public function index(Content $content)
+    {
+        $invoices = KiotVietInvoiceDetail::query()->with(['product', 'invoice'])->simplePaginate(20);
+        return $content
+            ->title('Điều phối')
+            ->view('v2.ops', compact('invoices'));
+    }
 
     /**
      * Make a grid builder.
@@ -146,29 +155,11 @@ class InvoiceDetailController extends AdminController
     {
         $form = new Form(new KiotVietInvoiceDetail());
 
-        $form->number('_invoiceId', __(' invoiceId'));
-        $form->number('invoiceId', __('InvoiceId'));
-        $form->text('branch_id', __('Branch id'));
-        $form->text('branch_name', __('Branch name'));
-        $form->text('productId', __('ProductId'));
-        $form->text('productCode', __('ProductCode'));
-        $form->text('productName', __('ProductName'));
-        $form->text('category_id', __('Category id'));
-        $form->text('category_name', __('Category name'));
-        $form->text('master_code', __('Master code'));
-        $form->text('trade_mark_name', __('Trade mark name'));
-        $form->text('quantity', __('Quantity'));
-        $form->text('price', __('Price'));
-        $form->text('discount', __('Discount'));
-        $form->text('subTotal', __('SubTotal'));
-        $form->text('opsNote', __('Note'));
-        $form->select('opsStatus', __('Status'));
-        $form->select('opsShipper', __('Shipper'));
-        $form->text('serialNumbers', __('SerialNumbers'));
-        $form->text('returnQuantity', __('ReturnQuantity'));
-        $form->text('discountRatio', __('DiscountRatio'));
-        $form->text('usePoint', __('UsePoint'));
-        $form->text('ProductFormulaHistoryId', __('ProductFormulaHistoryId'));
+
+        $form->select('opsStatus', __('Status'))->options(InvoiceEnum::getStatus());
+        $form->select('opsShipper', __('Shipper'))->options(User::query()->pluck('name','id')->toArray());
+        $form->multipleImage('opsImages', __('Images'));
+
 
         return $form;
     }
