@@ -64,13 +64,13 @@
             showbuttons: false,
         });
         $('.pick').click(function (e) {
-            console.log(e.target.dataset.value)
             let val = e.target.dataset.value
             $.ajax({
                 type: "POST",
                 url: '/assign/'+val,
                 success: function (res) {
-                    $('.pick-el-'+val).html('Hoàn thành')
+                    let html = '<a href="#'+val+'" class="btn book-btn pick" data-value="'+val+'">Hoàn thành</a>'
+                    $('.pick-el-'+val).html(html)
                     $('.florist-'+val).html(res.opsFloristName)
                     $('.status-'+val).html(res.opsStatusName)
                 },
