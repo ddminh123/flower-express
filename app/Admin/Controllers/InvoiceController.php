@@ -47,7 +47,7 @@ class InvoiceController extends AdminController
             });
         }
 
-        $invoices = $invoices->orderByDesc('expectedDelivery')->simplePaginate(10);
+        $invoices = $invoices->orderBy('expectedDelivery', 'asc')->simplePaginate(50);
 
         return view('v2.index', compact('invoices'));
     }

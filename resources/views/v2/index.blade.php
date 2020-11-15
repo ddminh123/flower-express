@@ -99,7 +99,8 @@
                                             <span class="pick-el-{{$invoice->_id}}">Nhận đơn</span>
                                         </a>
                                     </div>
-                                    @else
+                                    @elseif ($invoice->opsStatus == \App\InvoiceEnum::STATUS_FLORIS_PICKED)
+                                        
                                         <div class="col-6 pick-el-{{$invoice->_id}}">
                                             <a href="#{{$invoice->_id}}" class="btn book-btn pick" data-value="{{ $invoice->_id }}">Hoàn thành</a>
                                         </div>
