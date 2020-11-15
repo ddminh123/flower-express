@@ -34,16 +34,19 @@ class InvoiceController extends AdminController
         $invoices = KiotVietInvoice::query()->select('_id','status', 'expectedDelivery')
             ->where('status', '!=', 2);
         if (in_array($time, ['today', 'tomorrow', 'me'])) {
-            $invoices = $invoices->scopes($time);
+            if (!empty($q)) {
+                $invoices = $invoices->whereDate('expectedDelivery', $q);
+            } else {
+                $invoices = $invoices->scopes($time);
+            }
         }
+        //chi hien thi trang thai chua nhan da nhan va lam xong
         if (in_array($status, ['0', '1', '2', '3', '4', '5', '6'])) {
             $invoices = $invoices->whereHas('items', function ($q) use ($status) {
                 return $q->where('opsStatus', $status);
             });
         }
-        if (!empty($q)) {
-            $invoices = $invoices->where('code', 'like', '%' . $q . '%');
-        }
+
         $invoices = $invoices->orderByDesc('expectedDelivery')->simplePaginate(10);
 
         return view('v2.index', compact('invoices'));

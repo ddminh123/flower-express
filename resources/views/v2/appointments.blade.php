@@ -32,9 +32,12 @@
 										</div>
 									</div>
 									<div class="appointment-action">
-										<a href="#" class="btn btn-sm bg-success-light" data-toggle="modal" data-target="#appt_details_{{ $invoice->_id }}">
-                                            <i class="fas fa-check"></i> Giao thành công
-										</a>
+                                        <a href="#" class="btn btn-sm bg-primary-light" data-toggle="modal" data-target="#appt_details_{{ $invoice->_id }}">
+                                            <i class="fas fa-check"></i> Bắt đầu giao
+                                        </a>
+{{--										<a href="#" class="btn btn-sm bg-success-light" data-toggle="modal" data-target="#appt_details_{{ $invoice->_id }}">--}}
+{{--                                            <i class="fas fa-check"></i> Giao thành công--}}
+{{--										</a>--}}
 									</div>
                                     <div class="modal fade custom-modal" id="appt_details_{{ $invoice->_id }}">
                                         <div class="modal-dialog modal-dialog-centered">

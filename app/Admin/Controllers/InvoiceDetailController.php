@@ -26,10 +26,11 @@ class InvoiceDetailController extends AdminController
      */
     protected function grid()
     {
+        //totalPayment can update thuong xuyen
         $grid = new Grid(new KiotVietInvoiceDetail());
 
         $grid->model()->with(['invoice' => function($qr) {
-            return $qr->select('_id','code','invoiceDelivery', 'customerName', 'customerCode');
+            return $qr->select('_id','code','invoiceDelivery', 'customerName', 'customerCode', 'total', 'totalPayment');
         },'product' => function($qr) {
             return $qr->select('_id', 'code', 'images');
         }]);
@@ -39,7 +40,8 @@ class InvoiceDetailController extends AdminController
         $grid->column('productName', __('ProductName'))->width(150);
         $grid->column('invoice.code', __('InvoiceCode'));
         $grid->column('quantity', __('Quantity'));
-        $grid->column('price', __('Price'));
+        $grid->column('invoice.total', __('Total'));
+        $grid->column('invoice.totalPayment', __('TotalPayment'));
         $grid->column('opsStatus', __('Status'))->using([
             0 => 'Chưa làm',
             1 => 'Đã nhận',

@@ -36,10 +36,19 @@ Route::post('/pick', function () {
 })->name('pick');
 
 Route::post('/assign/{id}', function ($id) {
-    \Illuminate\Support\Facades\DB::table('kiotviet_invoice_details')->where('_id',$id)->update([
-        'opsFlorist'=> \Admin::user()->id,
-        'opsStatus' => \App\InvoiceEnum::STATUS_FLORIS_PICKED
-    ]);
+    //neu quantity lon hon 1 thi khi nhan don hien thi popup se nhan bao nhieu trong so quantity nay
+    $res = \App\Models\KiotVietInvoiceDetail::query()->where('_id',$id)->first();
+    if ($res->opsStatus == \App\InvoiceEnum::STATUS_FLORIS_PICKED){
+        \Illuminate\Support\Facades\DB::table('kiotviet_invoice_details')->where('_id',$id)->update([
+            'opsFlorist'=> \Admin::user()->id,
+            'opsStatus' => \App\InvoiceEnum::STATUS_FLORIS_DONE
+        ]);
+    }else{
+        \Illuminate\Support\Facades\DB::table('kiotviet_invoice_details')->where('_id',$id)->update([
+            'opsFlorist'=> \Admin::user()->id,
+            'opsStatus' => \App\InvoiceEnum::STATUS_FLORIS_PICKED
+        ]);
+    }
     $res = \App\Models\KiotVietInvoiceDetail::query()->where('_id',$id)->first();
     $data = $res->toArray();
     $data['opsFloristName'] = $res->florist->name ?? '';

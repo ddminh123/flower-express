@@ -89,7 +89,7 @@
                                         <i class="far fa-clock"></i> {{ !empty($invoiceDetail->purchaseDate) ? Carbon\Carbon::parse($invoiceDetail->purchaseDate)->format('d/m/Y H:i:s') : now()->format('d/m/Y H:i:s') }}
                                     </li>
                                     <li>
-                                        <i class="far fa-money-bill-alt"></i> Total: {{ number_format($invoice->invoice->total) }}
+                                        <i class="far fa-money-bill-alt"></i> Total: {{ number_format($invoice->invoice->total_florist) }}
                                     </li>
                                 </ul>
                                 <div class="row row-sm">
@@ -98,8 +98,8 @@
                                         <a href="#{{$invoice->_id}}" class="btn book-btn pick" data-value="{{ $invoice->_id }}">Nhận đơn</a>
                                     </div>
                                     @else
-                                        <div class="col-6 ok-el-{{$invoice->_id}}">
-                                            <a href="#{{$invoice->_id}}" class="btn book-btn ok" data-value="{{ $invoice->_id }}">Hoàn thành</a>
+                                        <div class="col-6 pick-el-{{$invoice->_id}}">
+                                            <a href="#{{$invoice->_id}}" class="btn book-btn pick" data-value="{{ $invoice->_id }}">Hoàn thành</a>
                                         </div>
                                     @endif
                                     <div class="col-6">

@@ -22,14 +22,28 @@ class KiotVietInvoice extends Model
         'invoiceDelivery' => 'array'
     ];
 
+    public function getTotalFloristAttribute()
+    {
+        //total + THK000002;
+        $total = $this->getAttribute('total');
+        $surcharge = $this->getAttribute('invoiceOrderSurcharges');
+        if (is_array($surcharge) && count($surcharge)) {
+            $surcharge = collect($surcharge);
+            $surchargeCode = $surcharge->where('surchargeCode', 'THK000002')->first();
+            $total = $total + $surchargeCode['surValue'];
+        }
+
+        return $total;
+    }
+
     public function items()
     {
-        return $this->hasMany(KiotVietInvoiceDetail::class,'_invoiceId','_id');
+        return $this->hasMany(KiotVietInvoiceDetail::class, '_invoiceId', '_id');
     }
 
     public function customer()
     {
-        return $this->belongsTo(KiotVietCustomer::class,'customerId', 'id');
+        return $this->belongsTo(KiotVietCustomer::class, 'customerId', 'id');
     }
 
     public function scopeToday($query)
