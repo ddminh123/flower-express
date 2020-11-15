@@ -6,6 +6,7 @@ use App\Admin\Widgets\Invoice\Me;
 use App\Admin\Widgets\Invoice\Normal;
 use App\Admin\Widgets\Invoice\Today;
 use App\Admin\Widgets\Invoice\Tomorrow;
+use App\InvoiceEnum;
 use App\Models\KiotVietInvoice;
 use App\Models\KiotVietInvoiceDetail;
 use Encore\Admin\Controllers\AdminController;
@@ -17,6 +18,8 @@ use Encore\Admin\Show;
 use Encore\Admin\Widgets\Box;
 use Encore\Admin\Widgets\Tab;
 use Encore\Admin\Widgets\Table;
+use Ixudra\Curl\Facades\Curl;
+use Spatie\Geocoder\Facades\Geocoder;
 
 class InvoiceController extends AdminController
 {
@@ -51,6 +54,11 @@ class InvoiceController extends AdminController
         $status = request('status', 'all');
         $q = request('q', '');
 
+        $response = Curl::to('https://api.myip.com')
+            ->asJsonResponse(true)
+            ->get();
+        $location = geoip($response['ip']);
+
         $invoices = KiotVietInvoiceDetail::query()->where('opsShipper', Admin::user()->id)->with(['invoice', 'product']);
         if (in_array($time, ['today', 'tomorrow', 'me'])) {
             $invoices = $invoices->scopes($time);
@@ -66,7 +74,7 @@ class InvoiceController extends AdminController
                 });
         }
         $invoices = $invoices->paginate(10);
-        return view('v2.appointments', compact('invoices'));
+        return view('v2.appointments', compact('invoices', 'location'));
     }
 
     public function update($invoiceId)

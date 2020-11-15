@@ -14,13 +14,13 @@
 								<!-- Appointment List -->
 								<div class="appointment-list">
 									<div class="profile-info-widget">
-										<a href="patient-profile" class="booking-doc-img">
-											<img src="{{ $invoice->product->images[0] }}" alt="User Image">
+										<a href="#{{ $invoice->_id }}" class="booking-doc-img">
+											<img src="{{ $invoice->product->images[0] ?? url('no_image.jpg') }}" alt="User Image">
 										</a>
 										<div class="profile-det-info">
-											<h3><a href="patient-profile">{{ $invoice->product->fullName ?? '' }}</a></h3>
+											<h3><a href="#{{ $invoice->_id }}">{{ $invoice->product->fullName ?? '' }}</a></h3>
 											<div class="patient-details">
-												<h5><i class="far fa-clock"></i> 14 Nov 2019, 10.00 AM</h5>
+												<h5><i class="far fa-clock"></i> {{ $invoice->invoice->expectedDelivery }}</h5>
 												<h5><i class="fas fa-map-marker-alt"></i>
                                                     {{ $invoice->invoice->invoiceDelivery['address'] ?? '' }}
                                                     {{ $invoice->invoice->invoiceDelivery['wardName'] ?? '' }}
@@ -32,10 +32,53 @@
 										</div>
 									</div>
 									<div class="appointment-action">
-										<a href="#" class="btn btn-sm bg-success-light" data-toggle="modal" data-target="#appt_details">
+										<a href="#" class="btn btn-sm bg-success-light" data-toggle="modal" data-target="#appt_details_{{ $invoice->_id }}">
                                             <i class="fas fa-check"></i> Giao thành công
 										</a>
 									</div>
+                                    <div class="modal fade custom-modal" id="appt_details_{{ $invoice->_id }}">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Thông tin vị trí</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <ul class="info-details">
+                                                        <li>
+                                                            <div class="details-header">
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <span class="title">{{ $invoice->invoice->code }}</span>
+                                                                        <span class="text">{{ $invoice->invoice->expectedDelivery }}</span>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div class="text-right">
+                                                                            <button type="button" class="btn bg-success-light btn-sm" id="topup_status">Xác nhận</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <span class="title">Vị trí:</span>
+                                                            <span class="text">{{ print_r($location) }}</span>
+                                                        </li>
+                                                        <li>
+                                                            <span class="title">Trạng thái:</span>
+                                                            <span class="text">Giao thành công</span>
+                                                        </li>
+                                                        <li>
+                                                            <span class="title">Thời gian:</span>
+                                                            <span class="text">{{ now()->format('d/m/Y H:i:s') }}</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 								</div>
                                 @endforeach
 								<!-- /Appointment List -->
@@ -46,50 +89,4 @@
 				</div>
                 <a href="{{ admin_url('auth/logout') }}">Logout</a>
 			</div>
-            <!-- /Page Content -->
-		<!-- Appointment Details Modal -->
-		<div class="modal fade custom-modal" id="appt_details">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">Thông tin vị trí</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<ul class="info-details">
-							<li>
-								<div class="details-header">
-									<div class="row">
-										<div class="col-md-6">
-											<span class="title">#APT0001</span>
-											<span class="text">21 Oct 2019 10:00 AM</span>
-										</div>
-										<div class="col-md-6">
-											<div class="text-right">
-												<button type="button" class="btn bg-success-light btn-sm" id="topup_status">Completed</button>
-											</div>
-										</div>
-									</div>
-								</div>
-							</li>
-							<li>
-								<span class="title">Status:</span>
-								<span class="text">Completed</span>
-							</li>
-							<li>
-								<span class="title">Confirm Date:</span>
-								<span class="text">29 Jun 2019</span>
-							</li>
-							<li>
-								<span class="title">Paid Amount</span>
-								<span class="text">$450</span>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- /Appointment Details Modal -->
 @endsection
