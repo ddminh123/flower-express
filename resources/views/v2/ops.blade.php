@@ -1,12 +1,51 @@
 <div class="box">
     <div class="box-header with-border">
-        <h3 class="box-title">Danh sách hóa đơn</h3>
+        <form role="form">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Search</label>
+                            <input type="text" class="form-control" name="q" placeholder="invoice code">
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select class="form-control select2" name="status">
+                                <option value=""></option>
+                                @foreach(\App\InvoiceEnum::getStatus() as $key => $value)
+                                    <option value="{{ $key }}">{{ $value }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Shipper</label>
+                            <select class="form-control select2" name="shipper">
+                                <option value=""></option>
+                                @foreach($shippers as $shipper)
+                                    <option value="{{ $shipper->id }}">{{ $shipper->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <!-- /.form-group -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
         <table class="table table-bordered">
             <tbody><tr>
                 <th style="width: 10px">#</th>
+                <th>Invoice</th>
                 <th>ProductName</th>
                 <th>Customer</th>
                 <th>Total</th>
@@ -18,7 +57,8 @@
             @foreach($invoices as $invoice)
             <tr>
                 <td><img src="{{ $invoice->product->images[0] ?? url('no_image.jpg') }}" height="50px" alt=""></td>
-                <td>{{ $invoice->product->fullName }}</td>
+                <td>{{ $invoice->invoice->code }}</td>
+                <td>{{ $invoice->product->code. ' - '.$invoice->product->fullName }}</td>
                 <td>Người đặt
                     <address>
                         <strong>{{ $invoice->invoice->customerName }}</strong><br>

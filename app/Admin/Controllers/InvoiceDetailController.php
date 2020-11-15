@@ -23,10 +23,27 @@ class InvoiceDetailController extends AdminController
 
     public function index(Content $content)
     {
-        $invoices = KiotVietInvoiceDetail::query()->with(['product', 'invoice'])->simplePaginate(20);
+        $shippers = User::query()->get();
+        $qr = request('q', '');
+        $shipper = request('shipper', '');
+        $status = request('status', '');
+
+        $invoices = KiotVietInvoiceDetail::query()->with(['product', 'invoice', 'shipper']);
+        if (!empty($q)) {
+            $invoices = $invoices->whereHas('invoice', function ($q) use ($qr) {
+                return $q->where('code', $qr);
+            });
+        }
+        if (!empty($shipper)) {
+            $invoices = $invoices->where('opsShipper', $shipper);
+        }
+        if (!empty($status)) {
+            $invoices = $invoices->where('opsStatus', $status);
+        }
+        $invoices = $invoices->simplePaginate(20);
         return $content
             ->title('Điều phối')
-            ->view('v2.ops', compact('invoices'));
+            ->view('v2.ops', compact('invoices', 'shippers'));
     }
 
     /**
@@ -39,13 +56,13 @@ class InvoiceDetailController extends AdminController
         //totalPayment can update thuong xuyen
         $grid = new Grid(new KiotVietInvoiceDetail());
 
-        $grid->model()->with(['invoice' => function($qr) {
-            return $qr->select('_id','code','invoiceDelivery', 'customerName', 'customerCode', 'total', 'totalPayment');
-        },'product' => function($qr) {
+        $grid->model()->with(['invoice' => function ($qr) {
+            return $qr->select('_id', 'code', 'invoiceDelivery', 'customerName', 'customerCode', 'total', 'totalPayment');
+        }, 'product' => function ($qr) {
             return $qr->select('_id', 'code', 'images');
         }]);
 
-        $grid->column('product.images', __('Images'))->image('',50,50);
+        $grid->column('product.images', __('Images'))->image('', 50, 50);
         $grid->column('productCode', __('ProductCode'));
         $grid->column('productName', __('ProductName'))->width(150);
         $grid->column('invoice.code', __('InvoiceCode'));
@@ -68,7 +85,7 @@ class InvoiceDetailController extends AdminController
             4 => 'Khách ok',
             5 => 'Đang giao',
             6 => 'Giao thành công',
-        ])->editable('select',[
+        ])->editable('select', [
             0 => 'Chưa làm',
             1 => 'Đã nhận',
             2 => 'Làm xong',
@@ -80,9 +97,9 @@ class InvoiceDetailController extends AdminController
 
         $grid->column('invoice.invoiceDelivery', __('Delivery'))->view('delivery');
 //        $grid->column('opsNote', __('Note'))->editable();
-        $listShippers = Administrator::query()->whereHas('roles',  function ($query) {
+        $listShippers = Administrator::query()->whereHas('roles', function ($query) {
             $query->whereIn('name', ['shipper']);
-        })->pluck('name','id')->toArray();
+        })->pluck('name', 'id')->toArray();
         $grid->column('opsShipper', __('Shipper'))->editable('select', $listShippers);
 
         $grid->disableActions();
@@ -91,15 +108,15 @@ class InvoiceDetailController extends AdminController
         $grid->disableExport();
         $grid->disableColumnSelector();
 
-        $grid->filter(function($filter){
+        $grid->filter(function ($filter) {
 
             // Remove the default id filter
             $filter->disableIdFilter();
             $filter->expand();
-            $filter->scope('today','Hôm nay')->whereDate('created_at', date('Y-m-d'))
+            $filter->scope('today', 'Hôm nay')->whereDate('created_at', date('Y-m-d'))
                 ->orWhere('updated_at', date('Y-m-d'));
-            $filter->scope('tomorrow','Ngày mai')->where('opsStatus', 1);
-            $filter->scope('me','Của tôi')->where('opsStatus', 2);
+            $filter->scope('tomorrow', 'Ngày mai')->where('opsStatus', 1);
+            $filter->scope('me', 'Của tôi')->where('opsStatus', 2);
         });
 
 
@@ -157,7 +174,7 @@ class InvoiceDetailController extends AdminController
 
 
         $form->select('opsStatus', __('Status'))->options(InvoiceEnum::getStatus());
-        $form->select('opsShipper', __('Shipper'))->options(User::query()->pluck('name','id')->toArray());
+        $form->select('opsShipper', __('Shipper'))->options(User::query()->pluck('name', 'id')->toArray());
         $form->multipleImage('opsImages', __('Images'));
 
 
