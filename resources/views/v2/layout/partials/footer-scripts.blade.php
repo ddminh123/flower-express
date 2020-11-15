@@ -70,7 +70,7 @@
                 type: "POST",
                 url: '/assign/'+val,
                 success: function (res) {
-                    $('.pick-el-'+val).hide()
+                    $('.pick-el-'+val).html('Hoàn thành')
                     $('.florist-'+val).html(res.opsFloristName)
                     $('.status-'+val).html(res.opsStatusName)
                 },

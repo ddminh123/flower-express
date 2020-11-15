@@ -94,8 +94,10 @@
                                 </ul>
                                 <div class="row row-sm">
                                     @if ($invoice->opsFlorist != \Admin::user()->id)
-                                    <div class="col-6 pick-el-{{$invoice->_id}}">
-                                        <a href="#{{$invoice->_id}}" class="btn book-btn pick" data-value="{{ $invoice->_id }}">Nhận đơn</a>
+                                    <div class="col-6">
+                                        <a href="#{{$invoice->_id}}" class="btn book-btn pick" data-value="{{ $invoice->_id }}">
+                                            <span class="pick-el-{{$invoice->_id}}">Nhận đơn</span>
+                                        </a>
                                     </div>
                                     @else
                                         <div class="col-6 pick-el-{{$invoice->_id}}">
