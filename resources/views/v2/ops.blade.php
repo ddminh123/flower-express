@@ -36,7 +36,10 @@
             <!-- /.box-body -->
 
             <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <div class="pull-right">
+                    <a href="{{admin_url('invoice-details')}}" class="btn btn-default">Clear</a>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
             </div>
         </form>
     </div>
