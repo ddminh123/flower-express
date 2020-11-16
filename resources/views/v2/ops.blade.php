@@ -91,7 +91,12 @@
                         </div>
                     </div>
                 </td>
-                <td>{{ $invoice->shipper->name }}</td>
+                <td>{{ $invoice->shipper->name }}
+                    @if (!empty($invoice->lat) && !empty($invoice->lon))
+                        <br>
+                        <a target="_blank" href="https://www.google.com/maps/search/?api=1&query={{$invoice->lat}},{{$invoice->lon}}">Tracking</a>
+                    @endif
+                </td>
                 <td><a href="{{ admin_url('invoice-details/'.$invoice->_id.'/edit') }}"><i class="fa fa-edit"></i> Edit</a></td>
             </tr>
             @endforeach
