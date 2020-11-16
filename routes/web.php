@@ -20,41 +20,59 @@ Route::post('/florist', function () {
     $pk = request('pk');
     $name = request('name');
     $value = request('value');
-    \Illuminate\Support\Facades\DB::table('kiotviet_invoice_details')->where('_id',$pk)->update([$name=> $value]);
+    \Illuminate\Support\Facades\DB::table('kiotviet_invoice_details')->where('_id', $pk)->update([$name => $value]);
 })->name('page');
 
 Route::post('/pick', function () {
     $pk = request('pk');
     $name = request('name');
     $value = request('value');
-    \Illuminate\Support\Facades\DB::table('kiotviet_invoice_details')->where('_id',$pk)->update([
+    \Illuminate\Support\Facades\DB::table('kiotviet_invoice_details')->where('_id', $pk)->update([
         'opsFlorist' => $value,
         'opsStatus' => \App\InvoiceEnum::STATUS_FLORIS_PICKED
     ]);
-    $res = \Illuminate\Support\Facades\DB::table('kiotviet_invoice_details')->where('_id',$pk)->first();
+    $res = \Illuminate\Support\Facades\DB::table('kiotviet_invoice_details')->where('_id', $pk)->first();
     return response()->json($res);
 })->name('pick');
 
 Route::post('/assign/{id}', function ($id) {
     //neu quantity lon hon 1 thi khi nhan don hien thi popup se nhan bao nhieu trong so quantity nay
-    $res = \App\Models\KiotVietInvoiceDetail::query()->where('_id',$id)->first();
-    if ($res->opsStatus == \App\InvoiceEnum::STATUS_FLORIS_PICKED){
-        \Illuminate\Support\Facades\DB::table('kiotviet_invoice_details')->where('_id',$id)->update([
-            'opsFlorist'=> \Admin::user()->id,
+    $res = \App\Models\KiotVietInvoiceDetail::query()->where('_id', $id)->first();
+    if ($res->opsStatus == \App\InvoiceEnum::STATUS_FLORIS_PICKED) {
+        \Illuminate\Support\Facades\DB::table('kiotviet_invoice_details')->where('_id', $id)->update([
+            'opsFlorist' => \Admin::user()->id,
             'opsStatus' => \App\InvoiceEnum::STATUS_FLORIS_DONE
         ]);
-    }else{
-        \Illuminate\Support\Facades\DB::table('kiotviet_invoice_details')->where('_id',$id)->update([
-            'opsFlorist'=> \Admin::user()->id,
+    } else {
+        \Illuminate\Support\Facades\DB::table('kiotviet_invoice_details')->where('_id', $id)->update([
+            'opsFlorist' => \Admin::user()->id,
             'opsStatus' => \App\InvoiceEnum::STATUS_FLORIS_PICKED
         ]);
     }
-    $res = \App\Models\KiotVietInvoiceDetail::query()->where('_id',$id)->first();
+    $res = \App\Models\KiotVietInvoiceDetail::query()->where('_id', $id)->first();
     $data = $res->toArray();
     $data['opsFloristName'] = $res->florist->name ?? '';
     $data['opsStatusName'] = $res->status_text ?? '';
     return response()->json($data);
 })->name('assign');
+
+Route::post('/shipper/{id}', function ($id) {
+    $res = \App\Models\KiotVietInvoiceDetail::query()->where('_id', $id)->first();
+
+    \Illuminate\Support\Facades\DB::table('kiotviet_invoice_details')->where('_id', $id)->update([
+        'opsStatus' => request('s', $res->opsStatus),
+        'lat' => request('lat', ''),
+        'lon' => request('lon', ''),
+        'shipperStartTime' => request('s', $res->opsStatus) == \App\InvoiceEnum::STATUS_SHIPPER_PICKED ? now()->format('Y-m-d H:i:s') : '',
+        'shipperEndTime' => request('s', $res->opsStatus) == \App\InvoiceEnum::STATUS_SHIPPER_DONE ? now()->format('Y-m-d H:i:s') : '',
+    ]);
+
+    $res = \App\Models\KiotVietInvoiceDetail::query()->where('_id', $id)->first();
+    $data = $res->toArray();
+    $data['opsFloristName'] = $res->florist->name ?? '';
+    $data['opsStatusName'] = $res->status_text ?? '';
+    return response()->json($data);
+})->name('shipper');
 
 Route::get('/index', function () {
     return view('v2.index');

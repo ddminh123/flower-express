@@ -31,7 +31,7 @@ class InvoiceController extends AdminController
         $q = request('q', '');
         //florist sẽ care thêm tiền phụ phí thêm hoa = total + THK000002 (surchase)
 
-        $invoices = KiotVietInvoice::query()->select('_id','status', 'expectedDelivery')
+        $invoices = KiotVietInvoice::query()->select('_id', 'status', 'expectedDelivery')
             ->where('status', '!=', 2);
         if (in_array($time, ['today', 'tomorrow', 'me'])) {
             if (!empty($q)) {
@@ -58,14 +58,10 @@ class InvoiceController extends AdminController
         $status = request('status', 'all');
         $q = request('q', '');
 
-        $response = Curl::to('https://api.myip.com')
-            ->asJsonResponse(true)
-            ->get();
-        $location = geoip($response['ip']);
-//        $address = Geocoder::getAddressForCoordinates($location['lat'],$location['lon']);
-//        dd($address);
-
-        $invoices = KiotVietInvoiceDetail::query()->where('opsShipper', Admin::user()->id)->with(['invoice', 'product']);
+        $invoices = KiotVietInvoiceDetail::query()
+            ->where('opsShipper', Admin::user()->id)
+            ->whereNotIn('opsStatus', [InvoiceEnum::STATUS_SHIPPER_DONE])
+            ->with(['invoice', 'product']);
         if (in_array($time, ['today', 'tomorrow', 'me'])) {
             $invoices = $invoices->scopes($time);
         }
@@ -80,7 +76,7 @@ class InvoiceController extends AdminController
                 });
         }
         $invoices = $invoices->paginate(10);
-        return view('v2.appointments', compact('invoices', 'location'));
+        return view('v2.shipper', compact('invoices'));
     }
 
     public function update($invoiceId)
