@@ -28,6 +28,10 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label>ExpectedDelivery</label>
+                            <input type="date" class="form-control" name="delivery">
+                        </div>
                         <!-- /.form-group -->
                     </div>
                     <!-- /.col -->
