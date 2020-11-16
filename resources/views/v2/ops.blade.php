@@ -51,6 +51,7 @@
                 <th>Invoice</th>
                 <th>ProductName</th>
                 <th>Customer</th>
+                <th>Note</th>
                 <th>Total</th>
                 <th>TotalPayment</th>
                 <th>Status</th>
@@ -75,6 +76,7 @@
                     </address></td>
                 <td>{{ $invoice->invoice->total }}</td>
                 <td>{{ $invoice->invoice->totalPayment }}</td>
+                <td>{{ $invoice->note }}</td>
                 <td>{{ $invoice->status_text }} <br>
                     <div class="progress">
                         <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ $invoice->status_progress }}"
