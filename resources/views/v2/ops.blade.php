@@ -78,6 +78,7 @@
                     <address>
                         <?php $value = $invoice->invoice->invoiceDelivery ?? [] ?>
                         <strong>{{ $value['receiver'] ?? '' }}</strong><br>
+                            SDT: {{ $value['contactNumber'] ?? ''}}<br>
                         {{ $value['address'] ?? '' }}, {{ $value['wardName'] ?? '' }}, {{ $value['locationName'] ?? '' }}
                     </address></td>
                 <td>{{ $invoice->note }}</td>
