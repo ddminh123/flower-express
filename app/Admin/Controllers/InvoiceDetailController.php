@@ -30,7 +30,7 @@ class InvoiceDetailController extends AdminController
         $delivery = request('delivery', '');
 
         $invoices = KiotVietInvoiceDetail::query()->with(['product', 'invoice', 'shipper'])->whereHas('invoice', function ($q) {
-            return $q->whereNotIn('status',2);
+            return $q->whereNotIn('status',[2]);
         });
         if (!empty($q)) {
             $invoices = $invoices->whereHas('invoice', function ($q) use ($qr) {
