@@ -1,8 +1,19 @@
 @extends('v2.layout.mainlayout')
 @section('content')
-    <!-- Popular Section -->
+{{--    <section class="section">--}}
+{{--        <div class="container-fluid">--}}
+{{--            <div class="banner-wrapper">--}}
+{{--                <div class="banner-header text-center">--}}
+{{--                    <h1>Search Doctor, Make an Appointment</h1>--}}
+{{--                    <p><a href="{{ admin_url('auth/logout') }}">Logout</a></p>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </section>--}}
+{{--    <!-- Popular Section -->--}}
     <section class="section">
         <div class="">
+            <a href="{{ admin_url('auth/logout') }}">Logout</a>
             <div class="row">
                 <div class="col-md-12">
                     <div class="doctor-slider slider">
