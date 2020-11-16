@@ -50,6 +50,7 @@
                 <th style="width: 10px">#</th>
                 <th>Invoice</th>
                 <th>ProductName</th>
+                <th>ExpectedDelivery</th>
                 <th>Customer</th>
                 <th>Note</th>
                 <th>Total</th>
@@ -63,6 +64,7 @@
                 <td><img src="{{ $invoice->product->images[0] ?? url('no_image.jpg') }}" height="50px" alt=""></td>
                 <td>{{ $invoice->invoice->code }}</td>
                 <td>{{ $invoice->product->code. ' - '.$invoice->product->fullName }}</td>
+                <td>{{ !empty($invoice->invoice->expectedDelivery) ? Carbon\Carbon::parse($invoice->invoice->expectedDelivery)->format('d/m/Y H:i:s') : $invoice->invoice->purchaseDate ?? '' }}</td>
                 <td>Người đặt
                     <address>
                         <strong>{{ $invoice->invoice->customerName }}</strong><br>
