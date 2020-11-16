@@ -74,9 +74,9 @@
                         <strong>{{ $value['receiver'] ?? '' }}</strong><br>
                         {{ $value['address'] ?? '' }}, {{ $value['wardName'] ?? '' }}, {{ $value['locationName'] ?? '' }}
                     </address></td>
+                <td>{{ $invoice->note }}</td>
                 <td>{{ $invoice->invoice->total }}</td>
                 <td>{{ $invoice->invoice->totalPayment }}</td>
-                <td>{{ $invoice->note }}</td>
                 <td>{{ $invoice->status_text }} <br>
                     <div class="progress">
                         <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ $invoice->status_progress }}"
