@@ -51,10 +51,7 @@ class SyncInvoiceToday extends Command
             $dateItem = $this->argument('day') ?? now()->format('Y-m-d');
             $this->info($dateItem);
             $data = [
-                'lastModifiedFrom' => $dateItem,
-                'SaleChannel' => true,
-                'includeOrderDelivery' => true,
-                'pageSize' => 1
+                'lastModifiedFrom' => $dateItem
             ];
             $response = Curl::to('https://public.kiotapi.com/invoices')
                 ->withHeaders(array('Retailer: '.$this->service->shopCode,'Authorization: Bearer '.$this->service->getAccessToken()))
@@ -82,9 +79,7 @@ class SyncInvoiceToday extends Command
                 $data = [
                     'pageSize' => 100,
                     'currentItem' => $currentItem,
-                    'lastModifiedFrom' => $dateItem,
-                    'includeOrderDelivery' => true,
-                    'SaleChannel' => true,
+                    'lastModifiedFrom' => $dateItem
                 ];
                 $response = Curl::to('https://public.kiotapi.com/invoices')
                     ->withHeaders(array('Retailer: '.$this->service->shopCode,'Authorization: Bearer '.$this->service->getAccessToken()))
