@@ -51,7 +51,7 @@ class SyncInvoiceToday extends Command
             $dateItem = $this->argument('day') ?? now()->format('Y-m-d');
             $this->info($dateItem);
             $data = [
-                'createdDate' => $dateItem,
+                'lastModifiedFrom' => $dateItem,
                 'SaleChannel' => true,
                 'includeOrderDelivery' => true,
                 'pageSize' => 1
@@ -82,7 +82,7 @@ class SyncInvoiceToday extends Command
                 $data = [
                     'pageSize' => 100,
                     'currentItem' => $currentItem,
-                    'createdDate' => $dateItem,
+                    'lastModifiedFrom' => $dateItem,
                     'includeOrderDelivery' => true,
                     'SaleChannel' => true,
                 ];
