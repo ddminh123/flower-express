@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
          $schedule->command('sync:category')->daily();
          $schedule->command('sync:customer')->everyTenMinutes();
          $schedule->command('sync:product')->everyTenMinutes();
-         $schedule->command('invoice:today')->everyMinute();
+         $schedule->command('invoice:2020')->everyTenMinutes();
     }
 
     /**

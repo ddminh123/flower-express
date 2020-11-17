@@ -45,10 +45,8 @@ class SyncInvoice2020 extends Command
      */
     public function handle()
     {
-        $date = Carbon::createFromDate(2020, 11, 02);
-
-        $startOfYear = $this->argument('startDate') ?? $date->copy()->startOfYear()->format('Y-m-d');
-        $now = $this->argument('endDate') ?? $date->format('Y-m-d');
+        $startOfYear = $this->argument('startDate') ?? now()->subDays(5)->format('Y-m-d');
+        $now = $this->argument('endDate') ?? now()->format('Y-m-d');
 
         $period = CarbonPeriod::create($startOfYear, $now);
 
@@ -58,7 +56,7 @@ class SyncInvoice2020 extends Command
             $this->info($date);
 
             $data = [
-                'createdDate' => $date,
+                'lastModifiedFrom' => $date,
             ];
             $response = Curl::to('https://public.kiotapi.com/invoices')
                 ->withHeaders(array('Retailer: ' . $this->service->shopCode, 'Authorization: Bearer ' . $this->service->getAccessToken()))
@@ -79,7 +77,7 @@ class SyncInvoice2020 extends Command
                 $data = [
                     'pageSize' => 100,
                     'currentItem' => $currentItem,
-                    'createdDate' => $date,
+                    'lastModifiedFrom' => $date,
                 ];
                 $response = Curl::to('https://public.kiotapi.com/invoices')
                     ->withHeaders(array('Retailer: ' . $this->service->shopCode, 'Authorization: Bearer ' . $this->service->getAccessToken()))
@@ -115,22 +113,5 @@ class SyncInvoice2020 extends Command
         }
 
         $this->info('done');
-    }
-
-    private function getAccessToken()
-    {
-        $data = [
-            'scopes' => 'PublicApi.Access',
-            'grant_type' => 'client_credentials',
-            'client_id' => $this->clientId,
-            'client_secret' => $this->clientSecret
-        ];
-
-        $response = Curl::to('https://id.kiotviet.vn/connect/token')
-            ->withContentType('application/x-www-form-urlencoded')
-            ->withData($data)
-            ->asJsonResponse(true)
-            ->post();
-        return $response;
     }
 }
