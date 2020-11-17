@@ -79,7 +79,8 @@ class SyncInvoiceToday extends Command
                 $data = [
                     'pageSize' => 100,
                     'currentItem' => $currentItem,
-                    'lastModifiedFrom' => $dateItem
+                    'lastModifiedFrom' => $dateItem,
+                    'IncludeInvoiceDelivery' => true
                 ];
                 $response = Curl::to('https://public.kiotapi.com/invoices')
                     ->withHeaders(array('Retailer: '.$this->service->shopCode,'Authorization: Bearer '.$this->service->getAccessToken()))
