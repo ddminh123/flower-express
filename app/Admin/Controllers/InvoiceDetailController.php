@@ -27,8 +27,11 @@ class InvoiceDetailController extends AdminController
         $qr = request('q', '');
         $shipper = request('shipper', '');
         $status = request('status', '');
+        $delivery = request('delivery', '');
 
-        $invoices = KiotVietInvoiceDetail::query()->with(['product', 'invoice', 'shipper']);
+        $invoices = KiotVietInvoiceDetail::query()->with(['product', 'invoice', 'shipper'])->whereHas('invoice', function ($q) {
+            return $q->whereNotIn('status',[2]);
+        });
         if (!empty($q)) {
             $invoices = $invoices->whereHas('invoice', function ($q) use ($qr) {
                 return $q->where('code', $qr);
@@ -39,6 +42,11 @@ class InvoiceDetailController extends AdminController
         }
         if (!empty($status)) {
             $invoices = $invoices->where('opsStatus', $status);
+        }
+        if (!empty($delivery)) {
+            $invoices = $invoices->whereHas('invoice', function ($q) use ($delivery) {
+                return $q->whereDate('expectedDelivery',$delivery);
+            });
         }
         $invoices = $invoices->simplePaginate(20);
         return $content

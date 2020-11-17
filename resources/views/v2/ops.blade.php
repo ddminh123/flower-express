@@ -28,6 +28,10 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label>ExpectedDelivery</label>
+                            <input type="date" class="form-control" name="delivery">
+                        </div>
                         <!-- /.form-group -->
                     </div>
                     <!-- /.col -->
@@ -50,7 +54,9 @@
                 <th style="width: 10px">#</th>
                 <th>Invoice</th>
                 <th>ProductName</th>
+                <th>ExpectedDelivery</th>
                 <th>Customer</th>
+                <th>Note</th>
                 <th>Total</th>
                 <th>TotalPayment</th>
                 <th>Status</th>
@@ -62,6 +68,7 @@
                 <td><img src="{{ $invoice->product->images[0] ?? url('no_image.jpg') }}" height="50px" alt=""></td>
                 <td>{{ $invoice->invoice->code }}</td>
                 <td>{{ $invoice->product->code. ' - '.$invoice->product->fullName }}</td>
+                <td>{{ !empty($invoice->invoice->expectedDelivery) ? Carbon\Carbon::parse($invoice->invoice->expectedDelivery)->format('d/m/Y H:i:s') : $invoice->invoice->purchaseDate ?? '' }}</td>
                 <td>Người đặt
                     <address>
                         <strong>{{ $invoice->invoice->customerName }}</strong><br>
@@ -71,8 +78,10 @@
                     <address>
                         <?php $value = $invoice->invoice->invoiceDelivery ?? [] ?>
                         <strong>{{ $value['receiver'] ?? '' }}</strong><br>
+                            SDT: {{ $value['contactNumber'] ?? ''}}<br>
                         {{ $value['address'] ?? '' }}, {{ $value['wardName'] ?? '' }}, {{ $value['locationName'] ?? '' }}
                     </address></td>
+                <td>{{ $invoice->note }}</td>
                 <td>{{ $invoice->invoice->total }}</td>
                 <td>{{ $invoice->invoice->totalPayment }}</td>
                 <td>{{ $invoice->status_text }} <br>
@@ -83,7 +92,12 @@
                         </div>
                     </div>
                 </td>
-                <td>{{ $invoice->shipper->name }}</td>
+                <td>{{ $invoice->shipper->name }}
+                    @if (!empty($invoice->lat) && !empty($invoice->lon))
+                        <br>
+                        <a target="_blank" href="https://www.google.com/maps/search/?api=1&query={{$invoice->lat}},{{$invoice->lon}}">Tracking</a>
+                    @endif
+                </td>
                 <td><a href="{{ admin_url('invoice-details/'.$invoice->_id.'/edit') }}"><i class="fa fa-edit"></i> Edit</a></td>
             </tr>
             @endforeach
