@@ -113,25 +113,16 @@ class SyncInvoiceToday extends Command
                         }
 
                         $details = $customer['invoiceDetails'];
-                        $payments = $customer['payments'] ?? [];
-                        $invoiceDelivery = $customer['invoiceDelivery'] ?? [];
 
                         KiotVietInvoiceDetail::query()->where('invoiceId',$invoice->id)->delete();
                         foreach ($details as $detail){
-                            $productInfo = $this->getProductDetail($detail['productId']);
                             $detail['_invoiceId'] = $invoice->_id;
                             $detail['invoiceId'] = $invoice->id;
                             $detail['created_at'] = now()->format('Y-m-d H:i:s');
                             $detail['updated_at'] = now()->format('Y-m-d H:i:s');
-                            $detail['category_id'] = $productInfo['category_id'] ?? '';
-                            $detail['category_name'] = $productInfo['category_name'] ?? '';
-                            $detail['master_code'] = $productInfo['master_code'] ?? '';
-                            $detail['trade_mark_name'] = $productInfo['trade_mark_name'] ?? '';//thuong hieu
                             KiotVietInvoiceDetail::query()->insert($detail);
                         }
 
-                        $this->invoicePayment($payments, $invoice);
-                        $this->invoiceDelivery($invoiceDelivery, $invoice);
                         $invoice->update(['status_send' => 10]);
 
                     }
@@ -147,49 +138,5 @@ class SyncInvoiceToday extends Command
             $this->service->saveSyncLog($this->getName(),$this->getDescription(),$exception);
             Log::error('flower Loi dong bo invoice '.now()->format('d/m/Y H:i:s'),[$exception]);
         }
-    }
-
-    private function invoicePayment($paymentFields, KiotVietInvoice $invoice)
-    {
-        if (!empty($paymentFields) && is_array($paymentFields) && count($paymentFields)) {
-            foreach ($paymentFields as $paymentField) {
-                $this->info('---' . $paymentField['id']);
-                $paymentField['_invoice_id'] = $invoice->_id;
-                $paymentField['invoice_id'] = $invoice->id;
-                $check = KiotVietInvoicePayment::query()->where('id', $paymentField['id'])->first();
-                if (!$check) {
-                    KiotVietInvoicePayment::query()->create($paymentField);
-                } else {
-                    $check->update($paymentField);
-                }
-                $this->info($invoice->code . ' PAYMENT');
-            }
-        }
-    }
-
-    private function invoiceDelivery($deliveryField, KiotVietInvoice $invoice)
-    {
-        if (is_array($deliveryField) && count($deliveryField)) {
-            $deliveryField['_invoice_id'] = $invoice->_id;
-            $deliveryField['invoice_id'] = $invoice->id;
-            $check2 = KiotVietInvoiceDelivery::query()->where('invoice_id', $invoice->id)->first();
-            if (!$check2) {
-                KiotVietInvoiceDelivery::query()->create($deliveryField);
-            } else {
-                $check2->update($deliveryField);
-            }
-            $this->info($invoice->code . ' DELIVERY');
-        }
-    }
-
-    private function getProductDetail($id)
-    {
-        $product = $this->service->getProduct($id);
-        $data['category_id'] = $product['categoryId'] ?? '';
-        $data['category_name'] = $product['categoryName'] ?? '';
-        $data['master_code'] = $product['masterCode'] ?? '';
-        $data['trade_mark_name'] = $product['tradeMarkName'] ?? '';//thuong hieu
-
-        return $data;
     }
 }
