@@ -118,6 +118,7 @@ class SyncInvoiceToday extends Command
                         foreach ($details as $detail){
                             $detail['_invoiceId'] = $invoice->_id;
                             $detail['invoiceId'] = $invoice->id;
+                            $detail['expectedDelivery'] = $expectedDelivery;
                             $detail['created_at'] = now()->format('Y-m-d H:i:s');
                             $detail['updated_at'] = now()->format('Y-m-d H:i:s');
                             KiotVietInvoiceDetail::query()->insert($detail);
