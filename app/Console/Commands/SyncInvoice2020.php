@@ -90,6 +90,10 @@ class SyncInvoice2020 extends Command
                 if (is_array($customers)) {
                     foreach ($customers as $customer) {
                         $this->info($customer['id']);
+                        $expectedDelivery = $customer['purchaseDate'];
+                        if (isset($customer['invoiceDelivery']['expectedDelivery'])) $expectedDelivery = $customer['invoiceDelivery']['expectedDelivery'];
+                        $expectedDelivery = Carbon::parse($expectedDelivery)->format('Y-m-d H:i:s');
+                        $customer['expectedDelivery'] = $expectedDelivery;
                         $verify = KiotVietInvoice::query()->where('id', $customer['id'])->first();
                         if (!$verify) {
                             $invoice = KiotVietInvoice::query()->create($customer);
@@ -104,6 +108,8 @@ class SyncInvoice2020 extends Command
                                     KiotVietInvoiceDetail::query()->insert($detail);
                                 }
                             }
+                        }else{
+                            $verify->update($customer);
                         }
                     }
                 }

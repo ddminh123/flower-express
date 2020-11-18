@@ -7,6 +7,7 @@ use App\Models\KiotVietInvoiceDelivery;
 use App\Models\KiotVietInvoiceDetail;
 use App\Models\KiotVietInvoicePayment;
 use App\KiotVietService;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -93,6 +94,11 @@ class SyncInvoiceToday extends Command
                     foreach ($customers as $customer)
                     {
                         $this->info($customer['id']);
+                        $expectedDelivery = $customer['purchaseDate'];
+                        if (isset($customer['invoiceDelivery']['expectedDelivery'])) $expectedDelivery = $customer['invoiceDelivery']['expectedDelivery'];
+                        $expectedDelivery = Carbon::parse($expectedDelivery)->format('Y-m-d H:i:s');
+                        $customer['expectedDelivery'] = $expectedDelivery;
+
                         $verify = KiotVietInvoice::query()->where('id',$customer['id'])->first();
 
                         if (!$verify) {
