@@ -31,25 +31,29 @@ class InvoiceController extends AdminController
         $q = request('q', '');
         //florist sẽ care thêm tiền phụ phí thêm hoa = total + THK000002 (surchase)
 
-        $invoices = KiotVietInvoice::query()->select('_id', 'status', 'expectedDelivery')
-            ->where('status', '!=', 2);
+        $invoices = KiotVietInvoiceDetail::query()->whereHas('invoice', function ($qr) {
+                return $qr->where('status', '!=', 2)->orderBy('expectedDelivery', 'asc');
+            });
         if (in_array($time, ['today', 'tomorrow', 'me'])) {
             if (!empty($q)) {
-                $invoices = $invoices->whereDate('expectedDelivery', $q);
+                $invoices = $invoices->whereHas('invoice', function ($qr) use ($q){
+                    return $qr->whereDate('expectedDelivery', $q);
+                });
             } else {
-                $invoices = $invoices->scopes($time);
+                $invoices = $invoices->whereHas('invoice', function ($qr) use ($time){
+                    return $qr->scopes($time);
+                });
             }
         }
         //chi hien thi trang thai chua nhan da nhan va lam xong
         if (in_array($status, ['0', '1', '2', '3', '4', '5', '6'])) {
-            $invoices = $invoices->whereHas('items', function ($q) use ($status) {
-                return $q->where('opsStatus', $status);
-            });
+            $invoices = $invoices->where('opsStatus', $status);
         }
 
-        $invoices = $invoices->orderBy('expectedDelivery', 'asc')->simplePaginate(50);
+        $total = $invoices->count();
+        $invoices = $invoices->simplePaginate(50);
 
-        return view('v2.index', compact('invoices'));
+        return view('v2.index', compact('invoices', 'total'));
     }
 
     public function shipper()
