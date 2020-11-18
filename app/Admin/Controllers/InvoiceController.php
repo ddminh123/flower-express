@@ -32,7 +32,7 @@ class InvoiceController extends AdminController
         //florist sẽ care thêm tiền phụ phí thêm hoa = total + THK000002 (surchase)
 
         $invoices = KiotVietInvoiceDetail::query()->whereHas('invoice', function ($qr) {
-                return $qr->where('status', '!=', 2)->orderBy('expectedDelivery', 'asc');
+                return $qr->where('status', '!=', 2);
             });
         if (in_array($time, ['today', 'tomorrow', 'me'])) {
             if (!empty($q)) {

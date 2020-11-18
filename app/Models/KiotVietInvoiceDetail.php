@@ -24,7 +24,7 @@ class KiotVietInvoiceDetail extends Model
 
     public function invoice()
     {
-        return $this->belongsTo(KiotVietInvoice::class, 'invoiceId', 'id');
+        return $this->belongsTo(KiotVietInvoice::class, 'invoiceId', 'id')->orderBy('expectedDelivery', 'asc');
     }
 
     public function product()
