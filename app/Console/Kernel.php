@@ -25,8 +25,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
          $schedule->command('sync:category')->daily();
-         $schedule->command('sync:customer')->everyTenMinutes();
-         $schedule->command('sync:product')->everyTenMinutes();
+         $schedule->command('sync:customer')->daily();
+         $schedule->command('sync:product')->daily();
          $schedule->command('invoice:today')->everyTenMinutes();
     }
 
